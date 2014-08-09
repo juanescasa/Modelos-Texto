@@ -1607,14 +1607,14 @@ MAIN MODEL MCDP
         identifier :  Validacion_Conectividad
         body       :  
           empty MsjeValidacion;
-          !for i IN  NCL do
-          !               if  SCON1(i)=0 OR SCON2(i)=0 then
-          !
-          !                       MsjeValidacion := MsjeValidacion + "\n" + "la conectividad del nodo  "  + i +"No esta dada, debido a que no es posible saliro entrar de él " ;
-          !               endif;
-          !endfor;
-          !dialogerror (MsjeValidacion)
-          !
+          for i IN  NCL do
+                         if  SCON1(i)=0 OR SCON2(i)=0 then
+          
+                                 MsjeValidacion := MsjeValidacion + "\n" + "la conectividad del nodo  "  + i +"No esta dada, debido a que no es posible saliro entrar de él " ;
+                         endif;
+          endfor;
+          dialogerror (MsjeValidacion)
+          
           !for j IN NPA
           !
           !endfor
