@@ -32,10 +32,10 @@ MAIN MODEL MCDP
       sql query   :  "SELECT * FROM MAE_NOD WHERE COD_ESC='1'"
       property    :  UseResultSet
       mapping     :  "COD_NOD"-->i,
-                          "COD_TIN"-->TNOD(i),
-                          "COOR_LON"-->CoorX(i),
-                          "COOR_LAT"-->CoorY(i)
-                          !"COD_MAR"-->MARCA(i),
+                           "COD_TIN"-->TNOD(i),
+                           "COOR_LON"-->CoorX(i),
+                           "COOR_LAT"-->CoorY(i)
+                           !"COD_MAR"-->MARCA(i),
 
     ENDPROCEDURE  ;
 
@@ -45,7 +45,7 @@ MAIN MODEL MCDP
       sql query   :  "Select * from  MAE_TIV"
       property    :  UseResultSet
       mapping     :  "COD_TIV"-->TVE,
-                          "CDUV"-->CDUV(v)
+                           "CDUV"-->CDUV(v)
 
     ENDPROCEDURE  ;
 
@@ -55,8 +55,8 @@ MAIN MODEL MCDP
       sql query   :  "SELECT * FROM MAE_VEH WHERE COD_ESC='1'"
       property    :  UseResultSet
       mapping     :  "COD_VEH"-->k,
-                          "CAPV"-->CAPV(k),
-                          "COUV"-->COUV(k)
+                           "CAPV"-->CAPV(k),
+                           "COUV"-->COUV(k)
 
     ENDPROCEDURE  ;
 
@@ -75,7 +75,7 @@ MAIN MODEL MCDP
       sql query   :  "Select * from  MAE_PRO"
       property    :  UseResultSet
       mapping     :  "COD_PRO"-->m,
-                          "DENS"-->DENS(m)
+                           "DENS"-->DENS(m)
 
     ENDPROCEDURE  ;
 
@@ -83,12 +83,12 @@ MAIN MODEL MCDP
       identifier  :  DB_MAE_COM
       data source :  "OACED_ESC001"
       sql query   :  " SELECT COD_COM, CACC " +
-                                  " FROM MAE_COM WHERE COD_COM IN " +
-                                          " (SELECT  COD_COM FROM COM_VEH WHERE COD_VEH IN "  +
-                                                  " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') AND PCOV='1') "
+                                   " FROM MAE_COM WHERE COD_COM IN " +
+                                           " (SELECT  COD_COM FROM COM_VEH WHERE COD_VEH IN "  +
+                                                   " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') AND PCOV='1') "
       property    :  UseResultSet
       mapping     :  "COD_COM"-->l,
-                          "CACC"-->CACC(l)
+                           "CACC"-->CACC(l)
 
     ENDPROCEDURE  ;
 
@@ -96,15 +96,15 @@ MAIN MODEL MCDP
       identifier  :  DB_NOD_NOD1
       data source :  "OACED_ESC001"
       sql query   :  "SELECT COD_NOD, COD_NOD1, TIVI, PNPP, DIST " +
-                                  " FROM NOD_NOD1 WHERE COD_NOD IN " +
-                                          " (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') " +
-                                          " AND  COD_NOD1 IN (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') "
+                                   " FROM NOD_NOD1 WHERE COD_NOD IN " +
+                                           " (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') " +
+                                           " AND  COD_NOD1 IN (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') "
       property    :  UseResultSet
       mapping     :  "COD_NOD"-->i,
-                          "COD_NOD1"-->j,
-                          "TIVI"-->TIVI(i,j),
-                          "PNPP"-->PNPP(i,j),
-                          "DIST"-->DIST(i,j)
+                           "COD_NOD1"-->j,
+                           "TIVI"-->TIVI(i,j),
+                           "PNPP"-->PNPP(i,j),
+                           "DIST"-->DIST(i,j)
 
     ENDPROCEDURE  ;
 
@@ -112,12 +112,12 @@ MAIN MODEL MCDP
       identifier  :  DB_TIV_VEH
       data source :  "OACED_ESC001"
       sql query   :  " SELECT COD_TIV, COD_VEH, PVET " +
-                                  " FROM TIV_VEH WHERE COD_VEH IN " +
-                                          " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') "
+                                   " FROM TIV_VEH WHERE COD_VEH IN " +
+                                           " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') "
       property    :  UseResultSet
       mapping     :  "COD_TIV"-->v,
-                          "COD_VEH"-->k,
-                          "PVET"-->PVET(v,k)
+                           "COD_VEH"-->k,
+                           "PVET"-->PVET(v,k)
 
     ENDPROCEDURE  ;
 
@@ -125,16 +125,16 @@ MAIN MODEL MCDP
       identifier  :  DB_NOD_PRO
       data source :  "OACED_ESC001"
       sql query   :  " SELECT COD_NOD, COD_PRO, CALM, CAPS, INVI, PPRC " +
-                                  " FROM NOD_PRO WHERE COD_NOD IN " +
-                                          " (SELECT COD_NOD FROM MAE_NOD WHERE COD_ESC='1') " +
-                                          " AND COD_PRO IN (SELECT COD_PRO FROM MAE_PRO)"
+                                   " FROM NOD_PRO WHERE COD_NOD IN " +
+                                           " (SELECT COD_NOD FROM MAE_NOD WHERE COD_ESC='1') " +
+                                           " AND COD_PRO IN (SELECT COD_PRO FROM MAE_PRO)"
       property    :  UseResultSet
       mapping     :  "COD_NOD"-->i,
-                          "COD_PRO"-->m,
-                          "CALM"-->CALM(i,m),
-                          "CAPS"-->CAPS(i,m),
-                          "INVI"-->INVI(i,m),
-                          "PPRC"-->PPRC(i,m)
+                           "COD_PRO"-->m,
+                           "CALM"-->CALM(i,m),
+                           "CAPS"-->CAPS(i,m),
+                           "INVI"-->INVI(i,m),
+                           "PPRC"-->PPRC(i,m)
       comment    :  "Nodos <- Productos"
 
     ENDPROCEDURE  ;
@@ -143,14 +143,14 @@ MAIN MODEL MCDP
       identifier  :  DB_NOD_PER
       data source :  "OACED_ESC001"
       sql query   :  " SELECT COD_NOD, COD_PER, TMIN, TMAX " +
-                                  " FROM NOD_PER WHERE COD_NOD IN " +
-                                          " (SELECT COD_NOD FROM MAE_NOD WHERE COD_ESC='1') " +
-                                          " AND COD_PER IN (SELECT COD_PER FROM MAE_PER WHERE COD_ESC='1') "
+                                   " FROM NOD_PER WHERE COD_NOD IN " +
+                                           " (SELECT COD_NOD FROM MAE_NOD WHERE COD_ESC='1') " +
+                                           " AND COD_PER IN (SELECT COD_PER FROM MAE_PER WHERE COD_ESC='1') "
       property    :  UseResultSet
       mapping     :  "COD_NOD"-->i,
-                          "COD_PER"-->t,
-                          "TMIN"-->TMIN(i,t),
-                          "TMAX"-->TMAX(i,t)
+                           "COD_PER"-->t,
+                           "TMIN"-->TMIN(i,t),
+                           "TMAX"-->TMAX(i,t)
       comment    :  "Nodos Periodos"
 
     ENDPROCEDURE  ;
@@ -159,15 +159,15 @@ MAIN MODEL MCDP
       identifier  :  DB_NOD_VEH
       data source :  "OACED_ESC001"
       sql query   :  "SELECT   COD_NOD, COD_VEH, PNPV, TSER, PNOI " +
-                                  " FROM NOD_VEH WHERE COD_NOD IN " +
-                                          " (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') " +
-                                          " AND COD_VEH IN (SELECT COD_VEH  FROM MAE_VEH WHERE COD_ESC='1')"
+                                   " FROM NOD_VEH WHERE COD_NOD IN " +
+                                           " (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') " +
+                                           " AND COD_VEH IN (SELECT COD_VEH  FROM MAE_VEH WHERE COD_ESC='1')"
       property    :  UseResultSet
       mapping     :  "COD_NOD"-->i,
-                          "COD_VEH"-->k,
-                          "PNPV"-->PNPV(i,k),
-                          "TSER"-->TSER(i,k),
-                          "PNOI"-->PNOI(i,k)
+                           "COD_VEH"-->k,
+                           "PNPV"-->PNPV(i,k),
+                           "TSER"-->TSER(i,k),
+                           "PNOI"-->PNOI(i,k)
 
     ENDPROCEDURE  ;
 
@@ -175,12 +175,12 @@ MAIN MODEL MCDP
       identifier  :  DB_COM_VEH
       data source :  "OACED_ESC001"
       sql query   :  " SELECT  COD_VEH, COD_COM, PCOV " +
-                                  " FROM COM_VEH WHERE COD_VEH IN " +
-                                          " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') AND PCOV='1' "
+                                   " FROM COM_VEH WHERE COD_VEH IN " +
+                                           " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') AND PCOV='1' "
       property    :  UseResultSet
       mapping     :  "COD_VEH"-->k,
-                          "COD_COM"-->l,
-                          "PCOV"-->PCOV(l,k)
+                           "COD_COM"-->l,
+                           "PCOV"-->PCOV(l,k)
       comment    :  "Compartimientos<-Vehiculos"
 
     ENDPROCEDURE  ;
@@ -189,14 +189,14 @@ MAIN MODEL MCDP
       identifier  :  DB_VEH_PER
       data source :  "OACED_ESC001"
       sql query   :  " SELECT COD_VEH, COD_PER, TFJO, TIJO " +
-                                  " FROM VEH_PER WHERE COD_VEH IN " +
-                                          " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') "  +
-                                          " AND COD_PER IN (SELECT COD_PER FROM MAE_PER WHERE COD_ESC='1')"
+                                   " FROM VEH_PER WHERE COD_VEH IN " +
+                                           " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') "  +
+                                           " AND COD_PER IN (SELECT COD_PER FROM MAE_PER WHERE COD_ESC='1')"
       property    :  UseResultSet
       mapping     :  "COD_VEH"-->k,
-                          "COD_PER"-->t,
-                          "TFJO"-->TFJO(k,t),
-                          "TIJO"-->TIJO(k,t)
+                           "COD_PER"-->t,
+                           "TFJO"-->TFJO(k,t),
+                           "TIJO"-->TIJO(k,t)
       comment    :  "Vehiculos Periodos"
 
     ENDPROCEDURE  ;
@@ -205,14 +205,14 @@ MAIN MODEL MCDP
       identifier  :  DB_NOD_NOD1_TIV
       data source :  "OACED_ESC001"
       sql query   :  " SELECT COD_NOD, COD_NOD1, COD_TIV, CTRA " +
-                                   "FROM NOD_NOD1_TIV WHERE COD_NOD IN " +
-                                          " (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') " +
-                                          " AND  COD_NOD1 IN (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') "
+                                    "FROM NOD_NOD1_TIV WHERE COD_NOD IN " +
+                                           " (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') " +
+                                           " AND  COD_NOD1 IN (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') "
       property    :  UseResultSet
       mapping     :  "COD_NOD"-->i,
-                          "COD_NOD1"-->j,
-                          "COD_TIV"-->v,
-                          "CTRA"-->CTRA(i,j,v)
+                           "COD_NOD1"-->j,
+                           "COD_TIV"-->v,
+                           "CTRA"-->CTRA(i,j,v)
       comment    :  "Nodos Nodos Tipo de Vehículos"
 
     ENDPROCEDURE  ;
@@ -221,15 +221,15 @@ MAIN MODEL MCDP
       identifier  :  DB_NOD_PRO_PER
       data source :  "OACED_ESC001"
       sql query   :  " SELECT COD_NOD, COD_PRO, COD_PER, DEMA, INVS " +
-                                  " FROM NOD_PRO_PER WHERE COD_NOD IN " +
-                                          " (SELECT COD_NOD FROM MAE_NOD WHERE COD_ESC='1') " +
-                                          " AND COD_PER IN (SELECT COD_PER FROM MAE_PER WHERE COD_ESC='1') "
+                                   " FROM NOD_PRO_PER WHERE COD_NOD IN " +
+                                           " (SELECT COD_NOD FROM MAE_NOD WHERE COD_ESC='1') " +
+                                           " AND COD_PER IN (SELECT COD_PER FROM MAE_PER WHERE COD_ESC='1') "
       property    :  UseResultSet
       mapping     :  "COD_NOD"-->i,
-                          "COD_PRO"-->m,
-                          "COD_PER"-->t,
-                          "DEMA"-->DEMA(i,m,t),
-                          "INVS"-->INVS(i,m,t)
+                           "COD_PRO"-->m,
+                           "COD_PER"-->t,
+                           "DEMA"-->DEMA(i,m,t),
+                           "INVS"-->INVS(i,m,t)
       comment    :  "Nodos<-Productos-Periodos"
 
     ENDPROCEDURE  ;
@@ -238,14 +238,14 @@ MAIN MODEL MCDP
       identifier  :  DB_PRO_COM
       data source :  "OACED_ESC001"
       sql query   :  " SELECT COD_PRO, COD_COM, CCIV FROM PRO_COM " +
-                                  " WHERE COD_COM IN " +
-                                          " (SELECT   COD_COM " +
-                                                  " FROM COM_VEH WHERE COD_VEH IN " +
-                                                          " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') AND PCOV='1') "
+                                   " WHERE COD_COM IN " +
+                                           " (SELECT   COD_COM " +
+                                                   " FROM COM_VEH WHERE COD_VEH IN " +
+                                                           " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') AND PCOV='1') "
       property    :  UseResultSet
       mapping     :  "COD_PRO"-->m,
-                          "COD_COM"-->l,
-                          "CCIV"-->CCIV(m,l)
+                           "COD_COM"-->l,
+                           "CCIV"-->CCIV(m,l)
       comment    :  "Nodos Productos Compartimientos"
 
     ENDPROCEDURE  ;
@@ -254,178 +254,15 @@ MAIN MODEL MCDP
       identifier  :  DB_ESCALARES
       data source :  "OACED_ESC001"
       sql query   :  " SELECT COD_ESC, VAL_ESC FROM ESCALARES  "
-                          !" SELECT COD_ESC, VAL_ESC FROM ESCALARES WHERE COD_ESC='MBIN' "
+                           !" SELECT COD_ESC, VAL_ESC FROM ESCALARES WHERE COD_ESC='MBIN' "
       property    :  UseResultSet
       mapping     :  "MBIN"-->MBIN ! REVISAR
                       
-                          !revisar esto, porque se modificó, la col ya no es MBIN, sino que es un dato de la Tabla
+                           !revisar esto, porque se modificó, la col ya no es MBIN, sino que es un dato de la Tabla
 
     ENDPROCEDURE  ;
 
   ENDSECTION Conexion_con_DB ;
-
-  SECTION Lectura_DB
-
-
-    PROCEDURE
-      identifier :  LEER_TODO
-      body       :  
-        Read From Table DB_MAE_TIN;
-        Read From Table DB_MAE_MAR;
-        Read From Table DB_MAE_NOD;
-        Read From Table DB_MAE_TIV;
-        Read From Table DB_MAE_VEH;
-        Read From Table DB_MAE_PER;
-        Read From Table DB_MAE_PRO;
-        Read From Table DB_MAE_COM;
-        Read From Table DB_NOD_NOD1;
-        Read From Table DB_TIV_VEH;
-        Read From Table DB_NOD_PRO;
-        Read From Table DB_NOD_PER;
-        Read From Table DB_NOD_VEH;
-        Read From Table DB_COM_VEH;
-        Read From Table DB_VEH_PER;
-        Read From Table DB_NOD_NOD1_TIV;
-        Read From Table DB_NOD_PRO_PER;
-        Read From Table DB_PRO_COM;
-        !Read From Table DB_ESCALARES;
-
-    ENDPROCEDURE  ;
-
-    PROCEDURE
-      identifier :  LEER_MAE_TIN
-      body       :  
-        Read From Table DB_MAE_TIN;
-
-    ENDPROCEDURE  ;
-
-    PROCEDURE
-      identifier :  LEER_MAE_MAR
-      body       :  
-        Read From Table DB_MAE_MAR;
-
-    ENDPROCEDURE  ;
-
-    PROCEDURE
-      identifier :  LEER_MAE_NOD
-      body       :  
-        Read From Table DB_MAE_NOD;
-
-    ENDPROCEDURE  ;
-
-    PROCEDURE
-      identifier :  LEER_MAE_TIV
-      body       :  
-        Read From Table DB_MAE_TIV;
-
-    ENDPROCEDURE  ;
-
-    PROCEDURE
-      identifier :  LEER_MAE_VEH
-      body       :  
-        Read From Table DB_MAE_VEH;
-
-    ENDPROCEDURE  ;
-
-    PROCEDURE
-      identifier :  LEER_MAE_PER
-      body       :  
-        Read From Table DB_MAE_PER;
-
-    ENDPROCEDURE  ;
-
-    PROCEDURE
-      identifier :  LEER_MAE_PRO
-      body       :  
-        Read From Table DB_MAE_PRO;
-
-    ENDPROCEDURE  ;
-
-    PROCEDURE
-      identifier :  LEER_MAE_COM
-      body       :  
-        Read From Table DB_MAE_COM;
-
-    ENDPROCEDURE  ;
-
-    PROCEDURE
-      identifier :  LEER_NOD_NOD1
-      body       :  
-        Read From Table DB_NOD_NOD1;
-
-    ENDPROCEDURE  ;
-
-    PROCEDURE
-      identifier :  LEER_TIV_VEH
-      body       :  
-        Read From Table DB_TIV_VEH;
-
-    ENDPROCEDURE  ;
-
-    PROCEDURE
-      identifier :  LEER_NOD_PRO
-      body       :  
-        Read From Table DB_NOD_PRO;
-
-    ENDPROCEDURE  ;
-
-    PROCEDURE
-      identifier :  LEER_NOD_PER
-      body       :  
-        Read From Table DB_NOD_PER;
-
-    ENDPROCEDURE  ;
-
-    PROCEDURE
-      identifier :  LEER_NOD_VEH
-      body       :  
-        Read From Table DB_NOD_VEH;
-
-    ENDPROCEDURE  ;
-
-    PROCEDURE
-      identifier :  LEER_COM_VEH
-      body       :  
-        Read From Table DB_COM_VEH;
-
-    ENDPROCEDURE  ;
-
-    PROCEDURE
-      identifier :  LEER_VEH_PER
-      body       :  
-        Read From Table DB_VEH_PER;
-
-    ENDPROCEDURE  ;
-
-    PROCEDURE
-      identifier :  LEER_DB_NOD_NOD1_TIV
-      body       :  
-        Read From Table DB_NOD_NOD1_TIV;
-
-    ENDPROCEDURE  ;
-
-    PROCEDURE
-      identifier :  LEER_NOD_PRO_PER
-      body       :  
-        Read From Table DB_NOD_PRO_PER;
-
-    ENDPROCEDURE  ;
-
-    PROCEDURE
-      identifier :  LEER_NOD_PRO_COM_PER
-      body       :  
-        Read From Table DB_PRO_COM;
-
-    ENDPROCEDURE  ;
-
-    PROCEDURE
-      identifier :  LEER_ESCALARES
-      body       :  
-        Read From Table DB_ESCALARES;
-
-    ENDPROCEDURE  ;
-
-  ENDSECTION Lectura_DB ;
 
   SECTION Elementos_Modelo_Matematico
 
@@ -1406,120 +1243,225 @@ MAIN MODEL MCDP
 
   ENDSECTION Modelo_Tiempos_de_Llegada ;
 
-  SECTION Procedimientos_Solucion_Modelo
+  SECTION Procesamiento_de_Datos
 
 
-    SECTION Procesamiento_de_Datos
+    SECTION Lectura_DB
 
 
       PROCEDURE
-        identifier :  CalculoConjuntos
+        identifier :  LEER_TODO
         body       :  
-          EMPTY  PNOC;
-          for (i, k, l)| l in COV(k)  do
-                  if PNPV(i,k) = 1 and PCOV(l,k)=1 then
-                          PNOC(i,l):=1;
-                  Else
-                          PNOC(i,l):=0;
-                  endif;
-          endfor;
+          Read From Table DB_MAE_TIN;
+          Read From Table DB_MAE_MAR;
+          Read From Table DB_MAE_NOD;
+          Read From Table DB_MAE_TIV;
+          Read From Table DB_MAE_VEH;
+          Read From Table DB_MAE_PER;
+          Read From Table DB_MAE_PRO;
+          Read From Table DB_MAE_COM;
+          Read From Table DB_NOD_NOD1;
+          Read From Table DB_TIV_VEH;
+          Read From Table DB_NOD_PRO;
+          Read From Table DB_NOD_PER;
+          Read From Table DB_NOD_VEH;
+          Read From Table DB_COM_VEH;
+          Read From Table DB_VEH_PER;
+          Read From Table DB_NOD_NOD1_TIV;
+          Read From Table DB_NOD_PRO_PER;
+          Read From Table DB_PRO_COM;
+          !Read From Table DB_ESCALARES;
 
       ENDPROCEDURE  ;
 
       PROCEDURE
-        identifier :  CalculoConectividadRed
-        comment    :  "Reglas de conectividad (a donde puedo salir de i):
-                       De un NOP se puede ir a un NPA o NCL, no se puede ir a un NPE.
-                       De un NPA no se puede ir a otro NPA, solo se puede ir a un NPE o NCL
-                       De un NCL se puede ir a otro NCL, NPA o NPE
-                       De un NPE no se puede salir"
+        identifier :  LEER_MAE_TIN
         body       :  
-          PCON(i,j):=0;
-          for (i,j) do
-                  !Definicion PNVI
-                  !De un NOP se puede ir a un NPA o NCL, no se puede ir a un NPE.
-                  if i in NOP and (j in (NPA or NCL)) then
-                          PCON(i,j):=1
-                  endif;
-                  !De un NPA no se puede ir a otro NPA, solo se puede ir a un NPE o NCL
-                  if i in NPA and (j in (NCL or NPE)) then
-                          PCON(i,j):=1
-                  endif;
-                  !De un NCL se puede ir a otro NCL, NPA o NPE
-                  if i in NCL and (j in (NCL or NPA or NPE)) and i<>j then
-                          PCON(i,j):=1
-                  endif;
-          
-          endfor;
-          
-          !CÁLCULO DE PROCEDIMIENTOS PARA REDUCCIÓN DE DOMINIO
-                  ! 1. No permitir visitas entre EDS “lejanas”, en tiempo o en distancia
-          for (i,j) | (i IN NCL and j IN NCL) do
-          
-                  if DIST(i,j)> MAXD then
-                          PCON(i,j):=0
-                  endif;
-          endfor;
-
-      ENDPROCEDURE  ;
-
-    ENDSECTION Procesamiento_de_Datos ;
-
-    SECTION Solucion_Modelo
-
-
-      PROCEDURE
-        identifier :  InicializacionVariables
-        body       :  
-          empty allvariables; !Se debe dejar porque sino se borra, se calcula de nuevo sobre los datos que ya están, y esto genera problemas
-          !incializa los inventarios de cada cliente
-          for (i in NCL, m in PRO) do
-                  INV(i,m,PINI-1):=INVI(i,m);
-          endfor;
-          !Inicializa los inventarios en vehículo
-          for (k, j in NOI(k), i in NNO(j), m, l in COV(k)) do
-                  CCV(i,m,l,PINI-1):=CCIV(m,l);
-          endfor;
-          !Inicializa variable de asignacion de visita al nodo origen
-          for (k, j in NOI(k), i in NNO(j)) do
-                  AVI(i,k,PINI-1):=1;
-          endfor;
+          Read From Table DB_MAE_TIN;
 
       ENDPROCEDURE  ;
 
       PROCEDURE
-        identifier :  INVScero
+        identifier :  LEER_MAE_MAR
         body       :  
-          for (i in NCL, m in PRO, t) do
-                  INVS(i,m,t):=0;
-          endfor;
+          Read From Table DB_MAE_MAR;
 
       ENDPROCEDURE  ;
 
       PROCEDURE
-        identifier :  SolucionModeloRuteo
+        identifier :  LEER_MAE_NOD
         body       :  
-          CalculoConjuntos;
-          CalculoConectividadRed;
-          InicializacionVariables;
-          solve MinimizarCostos;
+          Read From Table DB_MAE_NOD;
 
       ENDPROCEDURE  ;
 
-    ENDSECTION Solucion_Modelo ;
+      PROCEDURE
+        identifier :  LEER_MAE_TIV
+        body       :  
+          Read From Table DB_MAE_TIV;
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  LEER_MAE_VEH
+        body       :  
+          Read From Table DB_MAE_VEH;
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  LEER_MAE_PER
+        body       :  
+          Read From Table DB_MAE_PER;
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  LEER_MAE_PRO
+        body       :  
+          Read From Table DB_MAE_PRO;
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  LEER_MAE_COM
+        body       :  
+          Read From Table DB_MAE_COM;
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  LEER_NOD_NOD1
+        body       :  
+          Read From Table DB_NOD_NOD1;
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  LEER_TIV_VEH
+        body       :  
+          Read From Table DB_TIV_VEH;
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  LEER_NOD_PRO
+        body       :  
+          Read From Table DB_NOD_PRO;
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  LEER_NOD_PER
+        body       :  
+          Read From Table DB_NOD_PER;
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  LEER_NOD_VEH
+        body       :  
+          Read From Table DB_NOD_VEH;
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  LEER_COM_VEH
+        body       :  
+          Read From Table DB_COM_VEH;
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  LEER_VEH_PER
+        body       :  
+          Read From Table DB_VEH_PER;
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  LEER_DB_NOD_NOD1_TIV
+        body       :  
+          Read From Table DB_NOD_NOD1_TIV;
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  LEER_NOD_PRO_PER
+        body       :  
+          Read From Table DB_NOD_PRO_PER;
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  LEER_NOD_PRO_COM_PER
+        body       :  
+          Read From Table DB_PRO_COM;
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  LEER_ESCALARES
+        body       :  
+          Read From Table DB_ESCALARES;
+
+      ENDPROCEDURE  ;
+
+    ENDSECTION Lectura_DB ;
+
+    PROCEDURE
+      identifier :  CalculoConjuntos
+      body       :  
+        EMPTY  PNOC;
+        for (i, k, l)| l in COV(k)  do
+                if PNPV(i,k) = 1 and PCOV(l,k)=1 then
+                        PNOC(i,l):=1;
+                Else
+                        PNOC(i,l):=0;
+                endif;
+        endfor;
+
+    ENDPROCEDURE  ;
+
+    PROCEDURE
+      identifier :  CalculoConectividadRed
+      comment    :  "Reglas de conectividad (a donde puedo salir de i):
+                     De un NOP se puede ir a un NPA o NCL, no se puede ir a un NPE.
+                     De un NPA no se puede ir a otro NPA, solo se puede ir a un NPE o NCL
+                     De un NCL se puede ir a otro NCL, NPA o NPE
+                     De un NPE no se puede salir"
+      body       :  
+        PCON(i,j):=0;
+        for (i,j) do
+                !Definicion PNVI
+                !De un NOP se puede ir a un NPA o NCL, no se puede ir a un NPE.
+                if i in NOP and (j in (NPA or NCL)) then
+                        PCON(i,j):=1
+                endif;
+                !De un NPA no se puede ir a otro NPA, solo se puede ir a un NPE o NCL
+                if i in NPA and (j in (NCL or NPE)) then
+                        PCON(i,j):=1
+                endif;
+                !De un NCL se puede ir a otro NCL, NPA o NPE
+                if i in NCL and (j in (NCL or NPA or NPE)) and i<>j then
+                        PCON(i,j):=1
+                endif;
+        
+        endfor;
+        
+        !CÁLCULO DE PROCEDIMIENTOS PARA REDUCCIÓN DE DOMINIO
+                ! 1. No permitir visitas entre EDS “lejanas”, en tiempo o en distancia
+        for (i,j) | (i IN NCL and j IN NCL) do
+        
+                if DIST(i,j)> MAXD then
+                        PCON(i,j):=0
+                endif;
+        endfor;
+
+    ENDPROCEDURE  ;
 
     SECTION Validacion_de_Datos
 
-
-      PROCEDURE
-        identifier :  Definicion_ENPP
-        body       :  
-          EMPTY ENPP(j);
-          for (i,j) | PNPP(j,i)=1  do
-                          ENPP(j):=i
-          endfor;
-
-      ENDPROCEDURE  ;
 
       DECLARATION SECTION Parametros_de_Validacion
 
@@ -1538,9 +1480,13 @@ MAIN MODEL MCDP
            text         :  "Suma sobre ENPP" ;
 
         PARAMETER:
-           identifier   :  CONT
+           identifier   :  AUXI1
+           index domain :  i
            text         :  "Contador "
            comment      :  "Utilizado para validar conectividad" ;
+
+        PARAMETER:
+           identifier   :  AUXI2 ;
 
         PARAMETER:
            identifier   :  SUCO
@@ -1556,6 +1502,16 @@ MAIN MODEL MCDP
                            ;
 
       ENDSECTION  ;
+
+      PROCEDURE
+        identifier :  Definicion_ENPP
+        body       :  
+          EMPTY ENPP(j);
+          for (i,j) | PNPP(j,i)=1  do
+                          ENPP(j):=i
+          endfor;
+
+      ENDPROCEDURE  ;
 
       PROCEDURE
         identifier :  Validacion_INVI_CAPS
@@ -1618,39 +1574,76 @@ MAIN MODEL MCDP
 
       PROCEDURE
         identifier :  Validacion_Conectividad
+        comment    :  "!Validar procedimiento"
         body       :  
-          !empty MsjeValidacion;
-          !for i IN  NCL do
-          !               if  SCON1(i)=0 OR SCON2(i)=0 then
-          !
-          !                       MsjeValidacion := MsjeValidacion + "\n" + "la conectividad del nodo  "  + i +"No esta dada, debido a que no es posible saliro entrar de él " ;
-          !               endif;
-          !endfor;
-          !dialogerror (MsjeValidacion)
-          
-          
-          CONT:=0;
+          empty MsjeValidacion;
+          empty AUXI1;
           for i IN NCL do
-            if SCON1(i)=0 then
-                for j IN NPE do
-                          if PCON(i,j)=1 then
-                                  CONT:=CONT+1;
-                             !for jj in NPA
+              AUXI2:=0;
+              if SCON1(i)=0 then !Si no hay posibilidades de salir de i a una planta
+                  for j IN NPE do !Busque si hay posibilidades de ir a un nodo de pernoctacion
+                          if PCON(i,j)=1 then !Si encuentra dicho nodo de pernoctacion
+                                  if SCON1(ENPP(j))>0 then !Pregunte si el nodo origen asociado al nodo de pernoctacion j se conecta con una planta
+                                          AUXI2:=1; !Hay conectividad
+                                          break;
+                                  endif;
+                          endif;
+                  endfor;
+                  If  AUXI2=0 then
+                          MsjeValidacion := MsjeValidacion + "\n" + "Del nodo "  + i +" No hay forma de volver a una planta de abastecimiento, ni directo, ni a traves de un nodo de pernoctacion" ;
+                  endif;
           
-                             !endfor;
-                          endif;
-                          if CONT=0 then
-                                  MsjeValidacion := MsjeValidacion + "\n" + "la conectividad del nodo "  + i +"No esta dada con ninguna Planta y con ningún Nodo de Pernoctación " ;
-                          endif;
-                endfor;
-            endif;
+               endif;
           endfor;
 
       ENDPROCEDURE  ;
 
     ENDSECTION Validacion_de_Datos ;
 
-  ENDSECTION Procedimientos_Solucion_Modelo ;
+  ENDSECTION Procesamiento_de_Datos ;
+
+  SECTION Solucion_Modelo
+
+
+    PROCEDURE
+      identifier :  InicializacionVariables
+      body       :  
+        empty allvariables; !Se debe dejar porque sino se borra, se calcula de nuevo sobre los datos que ya están, y esto genera problemas
+        !incializa los inventarios de cada cliente
+        for (i in NCL, m in PRO) do
+                INV(i,m,PINI-1):=INVI(i,m);
+        endfor;
+        !Inicializa los inventarios en vehículo
+        for (k, j in NOI(k), i in NNO(j), m, l in COV(k)) do
+                CCV(i,m,l,PINI-1):=CCIV(m,l);
+        endfor;
+        !Inicializa variable de asignacion de visita al nodo origen
+        for (k, j in NOI(k), i in NNO(j)) do
+                AVI(i,k,PINI-1):=1;
+        endfor;
+
+    ENDPROCEDURE  ;
+
+    PROCEDURE
+      identifier :  INVScero
+      body       :  
+        for (i in NCL, m in PRO, t) do
+                INVS(i,m,t):=0;
+        endfor;
+
+    ENDPROCEDURE  ;
+
+    PROCEDURE
+      identifier :  SolucionModeloRuteo
+      body       :  
+        CalculoConjuntos;
+        CalculoConectividadRed;
+        InicializacionVariables;
+        solve MinimizarCostos;
+
+    ENDPROCEDURE  ;
+
+  ENDSECTION Solucion_Modelo ;
 
   SECTION GUI
 
