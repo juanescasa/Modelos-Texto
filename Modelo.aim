@@ -32,10 +32,10 @@ MAIN MODEL MCDP
       sql query   :  "SELECT * FROM MAE_NOD WHERE COD_ESC='1'"
       property    :  UseResultSet
       mapping     :  "COD_NOD"-->i,
-                            "COD_TIN"-->TNOD(i),
-                            "COOR_LON"-->CoorX(i),
-                            "COOR_LAT"-->CoorY(i)
-                            !"COD_MAR"-->MARCA(i),
+                              "COD_TIN"-->TNOD(i),
+                              "COOR_LON"-->CoorX(i),
+                              "COOR_LAT"-->CoorY(i)
+                              !"COD_MAR"-->MARCA(i),
 
     ENDPROCEDURE  ;
 
@@ -45,7 +45,7 @@ MAIN MODEL MCDP
       sql query   :  "Select * from  MAE_TIV"
       property    :  UseResultSet
       mapping     :  "COD_TIV"-->TVE,
-                            "CDUV"-->CDUV(v)
+                              "CDUV"-->CDUV(v)
 
     ENDPROCEDURE  ;
 
@@ -55,8 +55,8 @@ MAIN MODEL MCDP
       sql query   :  "SELECT * FROM MAE_VEH WHERE COD_ESC='1'"
       property    :  UseResultSet
       mapping     :  "COD_VEH"-->k,
-                            "CAPV"-->CAPV(k),
-                            "COUV"-->COUV(k)
+                              "CAPV"-->CAPV(k),
+                              "COUV"-->COUV(k)
 
     ENDPROCEDURE  ;
 
@@ -75,7 +75,7 @@ MAIN MODEL MCDP
       sql query   :  "Select * from  MAE_PRO"
       property    :  UseResultSet
       mapping     :  "COD_PRO"-->m,
-                            "DENS"-->DENS(m)
+                              "DENS"-->DENS(m)
 
     ENDPROCEDURE  ;
 
@@ -83,12 +83,12 @@ MAIN MODEL MCDP
       identifier  :  DB_MAE_COM
       data source :  "OACED_ESC001"
       sql query   :  " SELECT COD_COM, CACC " +
-                                    " FROM MAE_COM WHERE COD_COM IN " +
-                                            " (SELECT  COD_COM FROM COM_VEH WHERE COD_VEH IN "  +
-                                                    " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') AND PCOV='1') "
+                                      " FROM MAE_COM WHERE COD_COM IN " +
+                                              " (SELECT  COD_COM FROM COM_VEH WHERE COD_VEH IN "  +
+                                                      " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') AND PCOV='1') "
       property    :  UseResultSet
       mapping     :  "COD_COM"-->l,
-                            "CACC"-->CACC(l)
+                              "CACC"-->CACC(l)
 
     ENDPROCEDURE  ;
 
@@ -96,15 +96,15 @@ MAIN MODEL MCDP
       identifier  :  DB_NOD_NOD1
       data source :  "OACED_ESC001"
       sql query   :  "SELECT COD_NOD, COD_NOD1, TIVI, PNPP, DIST " +
-                                    " FROM NOD_NOD1 WHERE COD_NOD IN " +
-                                            " (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') " +
-                                            " AND  COD_NOD1 IN (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') "
+                                      " FROM NOD_NOD1 WHERE COD_NOD IN " +
+                                              " (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') " +
+                                              " AND  COD_NOD1 IN (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') "
       property    :  UseResultSet
       mapping     :  "COD_NOD"-->i,
-                            "COD_NOD1"-->j,
-                            "TIVI"-->TIVI(i,j),
-                            "PNPP"-->PNPP(i,j),
-                            "DIST"-->DIST(i,j)
+                              "COD_NOD1"-->j,
+                              "TIVI"-->TIVI(i,j),
+                              "PNPP"-->PNPP(i,j),
+                              "DIST"-->DIST(i,j)
 
     ENDPROCEDURE  ;
 
@@ -112,12 +112,12 @@ MAIN MODEL MCDP
       identifier  :  DB_TIV_VEH
       data source :  "OACED_ESC001"
       sql query   :  " SELECT COD_TIV, COD_VEH, PVET " +
-                                    " FROM TIV_VEH WHERE COD_VEH IN " +
-                                            " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') "
+                                      " FROM TIV_VEH WHERE COD_VEH IN " +
+                                              " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') "
       property    :  UseResultSet
       mapping     :  "COD_TIV"-->v,
-                            "COD_VEH"-->k,
-                            "PVET"-->PVET(v,k)
+                              "COD_VEH"-->k,
+                              "PVET"-->PVET(v,k)
 
     ENDPROCEDURE  ;
 
@@ -125,16 +125,16 @@ MAIN MODEL MCDP
       identifier  :  DB_NOD_PRO
       data source :  "OACED_ESC001"
       sql query   :  " SELECT COD_NOD, COD_PRO, CALM, CAPS, INVI, PPRC " +
-                                    " FROM NOD_PRO WHERE COD_NOD IN " +
-                                            " (SELECT COD_NOD FROM MAE_NOD WHERE COD_ESC='1') " +
-                                            " AND COD_PRO IN (SELECT COD_PRO FROM MAE_PRO)"
+                                      " FROM NOD_PRO WHERE COD_NOD IN " +
+                                              " (SELECT COD_NOD FROM MAE_NOD WHERE COD_ESC='1') " +
+                                              " AND COD_PRO IN (SELECT COD_PRO FROM MAE_PRO)"
       property    :  UseResultSet
       mapping     :  "COD_NOD"-->i,
-                            "COD_PRO"-->m,
-                            "CALM"-->CALM(i,m),
-                            "CAPS"-->CAPS(i,m),
-                            "INVI"-->INVI(i,m),
-                            "PPRC"-->PPRC(i,m)
+                              "COD_PRO"-->m,
+                              "CALM"-->CALM(i,m),
+                              "CAPS"-->CAPS(i,m),
+                              "INVI"-->INVI(i,m),
+                              "PPRC"-->PPRC(i,m)
       comment    :  "Nodos <- Productos"
 
     ENDPROCEDURE  ;
@@ -143,14 +143,14 @@ MAIN MODEL MCDP
       identifier  :  DB_NOD_PER
       data source :  "OACED_ESC001"
       sql query   :  " SELECT COD_NOD, COD_PER, TMIN, TMAX " +
-                                    " FROM NOD_PER WHERE COD_NOD IN " +
-                                            " (SELECT COD_NOD FROM MAE_NOD WHERE COD_ESC='1') " +
-                                            " AND COD_PER IN (SELECT COD_PER FROM MAE_PER WHERE COD_ESC='1') "
+                                      " FROM NOD_PER WHERE COD_NOD IN " +
+                                              " (SELECT COD_NOD FROM MAE_NOD WHERE COD_ESC='1') " +
+                                              " AND COD_PER IN (SELECT COD_PER FROM MAE_PER WHERE COD_ESC='1') "
       property    :  UseResultSet
       mapping     :  "COD_NOD"-->i,
-                            "COD_PER"-->t,
-                            "TMIN"-->TMIN(i,t),
-                            "TMAX"-->TMAX(i,t)
+                              "COD_PER"-->t,
+                              "TMIN"-->TMIN(i,t),
+                              "TMAX"-->TMAX(i,t)
       comment    :  "Nodos Periodos"
 
     ENDPROCEDURE  ;
@@ -159,15 +159,15 @@ MAIN MODEL MCDP
       identifier  :  DB_NOD_VEH
       data source :  "OACED_ESC001"
       sql query   :  "SELECT   COD_NOD, COD_VEH, PNPV, TSER, PNOI " +
-                                    " FROM NOD_VEH WHERE COD_NOD IN " +
-                                            " (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') " +
-                                            " AND COD_VEH IN (SELECT COD_VEH  FROM MAE_VEH WHERE COD_ESC='1')"
+                                      " FROM NOD_VEH WHERE COD_NOD IN " +
+                                              " (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') " +
+                                              " AND COD_VEH IN (SELECT COD_VEH  FROM MAE_VEH WHERE COD_ESC='1')"
       property    :  UseResultSet
       mapping     :  "COD_NOD"-->i,
-                            "COD_VEH"-->k,
-                            "PNPV"-->PNPV(i,k),
-                            "TSER"-->TSER(i,k),
-                            "PNOI"-->PNOI(i,k)
+                              "COD_VEH"-->k,
+                              "PNPV"-->PNPV(i,k),
+                              "TSER"-->TSER(i,k),
+                              "PNOI"-->PNOI(i,k)
 
     ENDPROCEDURE  ;
 
@@ -175,12 +175,12 @@ MAIN MODEL MCDP
       identifier  :  DB_COM_VEH
       data source :  "OACED_ESC001"
       sql query   :  " SELECT  COD_VEH, COD_COM, PCOV " +
-                                    " FROM COM_VEH WHERE COD_VEH IN " +
-                                            " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') AND PCOV='1' "
+                                      " FROM COM_VEH WHERE COD_VEH IN " +
+                                              " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') AND PCOV='1' "
       property    :  UseResultSet
       mapping     :  "COD_VEH"-->k,
-                            "COD_COM"-->l,
-                            "PCOV"-->PCOV(l,k)
+                              "COD_COM"-->l,
+                              "PCOV"-->PCOV(l,k)
       comment    :  "Compartimientos<-Vehiculos"
 
     ENDPROCEDURE  ;
@@ -189,14 +189,14 @@ MAIN MODEL MCDP
       identifier  :  DB_VEH_PER
       data source :  "OACED_ESC001"
       sql query   :  " SELECT COD_VEH, COD_PER, TFJO, TIJO " +
-                                    " FROM VEH_PER WHERE COD_VEH IN " +
-                                            " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') "  +
-                                            " AND COD_PER IN (SELECT COD_PER FROM MAE_PER WHERE COD_ESC='1')"
+                                      " FROM VEH_PER WHERE COD_VEH IN " +
+                                              " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') "  +
+                                              " AND COD_PER IN (SELECT COD_PER FROM MAE_PER WHERE COD_ESC='1')"
       property    :  UseResultSet
       mapping     :  "COD_VEH"-->k,
-                            "COD_PER"-->t,
-                            "TFJO"-->TFJO(k,t),
-                            "TIJO"-->TIJO(k,t)
+                              "COD_PER"-->t,
+                              "TFJO"-->TFJO(k,t),
+                              "TIJO"-->TIJO(k,t)
       comment    :  "Vehiculos Periodos"
 
     ENDPROCEDURE  ;
@@ -205,14 +205,14 @@ MAIN MODEL MCDP
       identifier  :  DB_NOD_NOD1_TIV
       data source :  "OACED_ESC001"
       sql query   :  " SELECT COD_NOD, COD_NOD1, COD_TIV, CTRA " +
-                                     "FROM NOD_NOD1_TIV WHERE COD_NOD IN " +
-                                            " (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') " +
-                                            " AND  COD_NOD1 IN (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') "
+                                       "FROM NOD_NOD1_TIV WHERE COD_NOD IN " +
+                                              " (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') " +
+                                              " AND  COD_NOD1 IN (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') "
       property    :  UseResultSet
       mapping     :  "COD_NOD"-->i,
-                            "COD_NOD1"-->j,
-                            "COD_TIV"-->v,
-                            "CTRA"-->CTRA(i,j,v)
+                              "COD_NOD1"-->j,
+                              "COD_TIV"-->v,
+                              "CTRA"-->CTRA(i,j,v)
       comment    :  "Nodos Nodos Tipo de Vehículos"
 
     ENDPROCEDURE  ;
@@ -221,15 +221,15 @@ MAIN MODEL MCDP
       identifier  :  DB_NOD_PRO_PER
       data source :  "OACED_ESC001"
       sql query   :  " SELECT COD_NOD, COD_PRO, COD_PER, DEMA, INVS " +
-                                    " FROM NOD_PRO_PER WHERE COD_NOD IN " +
-                                            " (SELECT COD_NOD FROM MAE_NOD WHERE COD_ESC='1') " +
-                                            " AND COD_PER IN (SELECT COD_PER FROM MAE_PER WHERE COD_ESC='1') "
+                                      " FROM NOD_PRO_PER WHERE COD_NOD IN " +
+                                              " (SELECT COD_NOD FROM MAE_NOD WHERE COD_ESC='1') " +
+                                              " AND COD_PER IN (SELECT COD_PER FROM MAE_PER WHERE COD_ESC='1') "
       property    :  UseResultSet
       mapping     :  "COD_NOD"-->i,
-                            "COD_PRO"-->m,
-                            "COD_PER"-->t,
-                            "DEMA"-->DEMA(i,m,t),
-                            "INVS"-->INVS(i,m,t)
+                              "COD_PRO"-->m,
+                              "COD_PER"-->t,
+                              "DEMA"-->DEMA(i,m,t),
+                              "INVS"-->INVS(i,m,t)
       comment    :  "Nodos<-Productos-Periodos"
 
     ENDPROCEDURE  ;
@@ -238,14 +238,14 @@ MAIN MODEL MCDP
       identifier  :  DB_PRO_COM
       data source :  "OACED_ESC001"
       sql query   :  " SELECT COD_PRO, COD_COM, CCIV FROM PRO_COM " +
-                                    " WHERE COD_COM IN " +
-                                            " (SELECT   COD_COM " +
-                                                    " FROM COM_VEH WHERE COD_VEH IN " +
-                                                            " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') AND PCOV='1') "
+                                      " WHERE COD_COM IN " +
+                                              " (SELECT   COD_COM " +
+                                                      " FROM COM_VEH WHERE COD_VEH IN " +
+                                                              " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') AND PCOV='1') "
       property    :  UseResultSet
       mapping     :  "COD_PRO"-->m,
-                            "COD_COM"-->l,
-                            "CCIV"-->CCIV(m,l)
+                              "COD_COM"-->l,
+                              "CCIV"-->CCIV(m,l)
       comment    :  "Nodos Productos Compartimientos"
 
     ENDPROCEDURE  ;
@@ -254,11 +254,11 @@ MAIN MODEL MCDP
       identifier  :  DB_ESCALARES
       data source :  "OACED_ESC001"
       sql query   :  " SELECT COD_ESC, VAL_ESC FROM ESCALARES  "
-                            !" SELECT COD_ESC, VAL_ESC FROM ESCALARES WHERE COD_ESC='MBIN' "
+                              !" SELECT COD_ESC, VAL_ESC FROM ESCALARES WHERE COD_ESC='MBIN' "
       property    :  UseResultSet
       mapping     :  "MBIN"-->MBIN ! REVISAR
                       
-                            !revisar esto, porque se modificó, la col ya no es MBIN, sino que es un dato de la Tabla
+                              !revisar esto, porque se modificó, la col ya no es MBIN, sino que es un dato de la Tabla
 
     ENDPROCEDURE  ;
 
@@ -318,7 +318,7 @@ MAIN MODEL MCDP
       SET:
          identifier   :  NOD
          text         :  "Nodos"
-         indices      :  i, j, jj ;
+         indices      :  i, j, jj, ii ;
 
       SET:
          identifier   :  MAR
@@ -1448,12 +1448,26 @@ MAIN MODEL MCDP
                 endif;
         
         endfor;
-        
+        !1.
         !CÁLCULO DE PROCEDIMIENTOS PARA REDUCCIÓN DE DOMINIO
                 ! 1. No permitir visitas entre EDS “lejanas”, en tiempo o en distancia
         for (i,j) | (i IN NCL and j IN NCL) do
         
                 if DIST(i,j)> MAXD then
+                        PCON(i,j):=0
+                endif;
+        endfor;
+        
+        
+        !2.
+        !De una EDS no salgo a un nodo de pernoctación que este más lejos (con un exceso porcentual) de lo que
+        !la EDS está de la planta de abastecimiento. Con esto debo garantizar que exista un nodo de pernoctación más
+        !cercano a la planta que cualquier EDS.
+        
+        for (i,j,jj) |i in NCL  and j in NPE and jj in PMC(i) do
+        
+                if TIVI(i,j)>EXCP*TIVI(i,jj) then ! Si el tiempo de viaje de la  EDS i  al Nod pernocta j  es mayor que
+                                                  !el tiempo de viaje  de la  EDS i  a la planta jj (que es la planta   más cercana a i) en un                            !exceso porcentual definido, entonces elimine la conectividad
                         PCON(i,j):=0
                 endif;
         endfor;
@@ -1463,7 +1477,23 @@ MAIN MODEL MCDP
     SECTION Validacion_de_Datos
 
 
-      DECLARATION SECTION Parametros_de_Validacion
+      DECLARATION SECTION Identificadores_de_Validacion
+
+        PARAMETER:
+           identifier   :  MINT
+           index domain :  i in NCL
+           text         :  "Distancias mínimas desde i a una planta la cual aún no se conoce  a cual j corresponde."
+           definition   :  MIN((ii in EMPC(i) ,j in NPA),TIVI(ii,j)) ;
+
+        SET:
+           identifier   :  PMC
+           index domain :  i in NCL
+           subset of    :  NPA
+           text         :  "Planta de Abastecimiento más cercana a la EDS i "
+           definition   :  {j in NPA| TIVI(i,j)=MINT(i)}
+           comment      :  "Identifica las j en Planta tal que el tiempo de viaje de i a j sea igual a MINT(i),  y ya se conoce que MINT(i) tiene el valor
+                            de la menor distancia de  i a una planta. Por tanto donde encuentre que TIVI=MINT, se encuentra el j que representa la planta más cercana a
+                            la EDS i. Incluyendo los nodos ficticios. osea la planta y los ficticios que la representan." ;
 
         STRING PARAMETER:
            identifier   :  MsjeValidacion ;
@@ -1500,6 +1530,10 @@ MAIN MODEL MCDP
            text         :  "Suma de los valores 1 de la conectividad del parametro PCON"
            definition   :  sum ((i,j),PCON(i,j)) ;
 
+        PARAMETER:
+           identifier   :  EXCP
+           text         :  "Exceso porcentual para la distancia EDS-NPE respecto a  NPA. Usado en el procedimeinto CalculoCOnectividadRed" ;
+
         ELEMENT PARAMETER:
            identifier   :  ENPP
            index domain :  j
@@ -1507,6 +1541,13 @@ MAIN MODEL MCDP
            range        :  NOD
            definition   :  !{i|PNPP(i,j)=1}
                            ;
+
+        SET:
+           identifier   :  EMPC
+           index domain :  i in NCL
+           subset of    :  NCL
+           text         :  "COnjunto indexado sobre sí mismo para usar la función MIn en el parámetro MINT(i)"
+           definition   :  i ;
 
         ELEMENT PARAMETER:
            identifier   :  ENPP2
@@ -1530,6 +1571,27 @@ MAIN MODEL MCDP
           for (i,j) | PNPP(i,j)=1  do
                           ENPP2(j):=i
           endfor;
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  Definicion_PPMC
+        body       :  
+          !for i in NCL do
+          !!MINT:=10000000000000000;
+          !!Obteniendo la planta j más cercana a la EDS i         para defini PPMC=1 en ese caso
+          !!MIN(j IN NPA, TIVI(i,j));
+          !       for j in NPA do
+          !               if TIVI(i,j)<MINT then !Identificando si TIVI es menor al paramero auxiliar MINT
+          !                       !PTPL(i)=TIVI(i,j)
+          !                       !MINT:=TIVI(i,j); !Reemplazando MINT, haciendolo = a TIVI en caso de que TIVI sea MENOR
+          !
+          !                               !EPMC(i):=j
+          !               endif;
+          !        !PPMC(i,j):=1
+          !       endfor;
+          !endfor;
+          !
 
       ENDPROCEDURE  ;
 
