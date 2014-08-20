@@ -275,7 +275,8 @@ MAIN MODEL MCDP
          index           :  t
          current period  :  PINI
          interval length :  PEPA
-         definition      :  !ElementRange(0,MPER,prefix:"t-")
+         definition      :  PERH
+                            !ElementRange(0,MPER,prefix:"t-")
                             ;
 
       SET:
@@ -1484,11 +1485,17 @@ MAIN MODEL MCDP
       body       :  
         PCON(i,j):=0;
         for (i,j) do
-                !Definicion PNVI
+                !Definicion PNVI cuando se prohibe el moviemiento por el tramo NOP-NPE
                 !De un NOP se puede ir a un NPA o NCL, no se puede ir a un NPE.
-                if i in NOP and (j in (NPA or NCL)) then
+        !        if i in NOP and (j in (NPA or NCL)) then
+        !                PCON(i,j):=1
+        !        endif;
+        ! Conectividad NOP con NPE para Modelo VRP
+                if i in NOP and (j in (NPA or NCL or NPE)) then
                         PCON(i,j):=1
                 endif;
+        
+        
                 !De un NPA no se puede ir a otro NPA, solo se puede ir a un NPE o NCL
                 if i in NPA and (j in (NCL or NPE)) then
                         PCON(i,j):=1
@@ -1506,39 +1513,51 @@ MAIN MODEL MCDP
       identifier :  Calculo_Reducc_Dom_Conectividad
       body       :  
         !1.
-        !CÁLCULO DE PROCEDIMIENTOS PARA REDUCCIÓN DE DOMINIO: Nota: Considerar hacerlos en procedimientos individuales.
-                ! 1. No permitir visitas entre EDS “lejanas”, en tiempo o en distancia
+        !CÁLCULO DE PROCEDIMIENTOS PARA REDUCCIÓN DE DOMINIO:
+                ! 1. No permitir visitas entre EDS “lejanas”, en distancia
         for (i,j) | (i IN NCL and j IN NCL) do
-        
                 if DIST(i,j)> MAXD then
                         PCON(i,j):=0
                 endif;
         endfor;
-        
-        
-        !2.
-        !De una EDS no salgo a un nodo de pernoctación que este más lejos (con un exceso porcentual) de lo que
+        !2. De una EDS no salgo a un nodo de pernoctación que este más lejos (con un exceso porcentual) de lo que
         !la EDS está de la planta de abastecimiento. Con esto debo garantizar que exista un nodo de pernoctación más
         !cercano a la planta que cualquier EDS.
-        
         for (i,j,jj) |i in NCL  and j in NPE and jj in PMC(i) do
-        
                 if TIVI(i,j)>EXCP*TIVI(i,jj) then ! Si el tiempo de viaje de la  EDS i  al Nod pernocta j  es mayor que
-                                                  !el tiempo de viaje  de la  EDS i  a la planta jj (que es la planta   más cercana a i) en un                            !exceso porcentual definido, entonces elimine la conectividad
+                                                  !el tiempo de viaje  de la  EDS i  a la planta jj (que es la planta   más cercana a i) en un exceso porcentual definido, entonces elimine la conectividad
                         PCON(i,j):=0
                 endif;
         endfor;
-        
-        !3.
-        !Desde un nodo no se puede ir a un nodo que esté a un tiempo mayor que la jornada de trabajo diaria.
+        !3.Desde un nodo no se puede ir a un nodo que esté a un tiempo mayor que la jornada de trabajo diaria.
         !Ojo la Regla se deb cumplir con una Hogura, una distancia  lo suficientemente grande!
-        
         for (i,j) do
                 if TIVI(i,j) > PDJO + ADTJ then    !Tiempo de la jornada que trabaja más en excedente. (nota, se podría envitar el k y t ya que
                                                     !las jornadas son similares
                                 PCON(i,j):=0
                 endif;
         endfor;
+
+    ENDPROCEDURE  ;
+
+    PROCEDURE
+      identifier :  Seleccion_PAB_Mas_Cercana_EDS
+      body       :  
+        !Obteniendo la planta j más cercana a la EDS i
+        SBIGM:=100000000000000000;
+        MINI:=SBIGM;
+        For i in NCL do
+               for j in NPA do
+                       if TIVI(i,j)<MINI then !Identificando si TIVI es menor al paramero auxiliar MINI
+                              MINI:=TIVI(i,j); !Reemplazando MINT, haciendolo = a TIVI en caso de que TIVI sea MENOR
+                              PMCE(i):=j;
+                       endif;
+               endfor;
+                MINI:=SBIGM; !Inicializando la Bigm
+        Endfor;
+        !Esta forma con solo PMCE1 tiene un problema. El problema es que como sobre escribe, no quedará la Planta y las platas ficticias, queda el último que evaluó
+        !PEMCE2 se crea para sacar la lista de los j que registre, después de eso se saca el Mínimo de este y  se define para esa i en que se está
+        !el j más pequeño.
 
     ENDPROCEDURE  ;
 
@@ -1572,14 +1591,16 @@ MAIN MODEL MCDP
            identifier   :  SCON1
            index domain :  (i)
            text         :  "Conectividdad de EDS con PAB"
-           definition   :  SUM (j IN NPA, PCON(j,i))
+           definition   :  SUM (j IN NPA, PCON(i,j))
+                           !SUM (j IN NPA, PCON(j,i))
            comment      :  "Utilizado para validar conectividad" ;
 
         PARAMETER:
            identifier   :  SCON2
            index domain :  (i)
            text         :  "Conectividdad de EDS con PAB"
-           definition   :  SUM (j IN NPA, PCON(i,j))
+           definition   :  SUM (j IN NPA, PCON(j,i))
+                           !SUM (j IN NPA, PCON(i,j))
            comment      :  "Utilizado para validar conectividad" ;
 
         PARAMETER:
@@ -1615,6 +1636,49 @@ MAIN MODEL MCDP
            text         :  "Adición de holgura o exceso al promedio de la  diferencia del tiempo de jornada. Lo especifica el usuario "
            comment      :  "Se usa en el procedimiento Validacion_Conectividad" ;
 
+        PARAMETER:
+           identifier   :  PDES
+           text         :  "Porcentaje de desviación de Capacidad en peso, capacidad de Compartimientos. Procedimiento: Validacion_CAPV_DENS"
+           range        :  [0, 1] ;
+
+        PARAMETER:
+           identifier   :  REPE
+           index domain :  k
+           text         :  "Relación Pesos: Usado en procedimiento Validacion_CAPV_DENS" ;
+
+        PARAMETER:
+           identifier   :  PCAL
+           index domain :  (k)
+           text         :  "Peso calculado a partir de la densidad y de la capacidad en vol de los Compartimentos" ;
+
+        PARAMETER:
+           identifier   :  DETV
+           text         :  "Demanda Total en Volumen " ;
+
+        PARAMETER:
+           identifier   :  CPTV
+           text         :  "Capacidad Total en Volumen " ;
+
+        PARAMETER:
+           identifier   :  CONT
+           text         :  "Contador usado en el procedimiento Valicacion_VEH_CAPV_CACC" ;
+
+        PARAMETER:
+           identifier   :  MINI ;
+
+        PARAMETER:
+           identifier   :  SBIGM
+           text         :  "Super Big M: Valor muy grande. Procedimiento: Validacion_NPE_NPA_EDS" ;
+
+        PARAMETER:
+           identifier   :  AUXIL
+           index domain :  (j)
+           text         :  "Procedimiento: Validacion_NPE_NPA_EDS" ;
+
+        PARAMETER:
+           identifier   :  PAUX
+           index domain :  (i) ;
+
         ELEMENT PARAMETER:
            identifier   :  ENPP
            index domain :  j
@@ -1638,6 +1702,36 @@ MAIN MODEL MCDP
            definition   :  !{i|PNPP(i,j)=1}
                            ;
 
+        SET:
+           identifier   :  CSCA
+           index domain :  l
+           subset of    :  COM
+           text         :  "Compartimientos sin Capacidad procedimiento: Validacion_CAPV_DENS" ;
+
+        SET:
+           identifier   :  VSCA
+           index domain :  k
+           subset of    :  VEH
+           text         :  "Vahículos sin apacidad en peso: Procedimiento:  Validacion_CAPV_DENS" ;
+
+        SET:
+           identifier   :  VSCV
+           index domain :  k
+           subset of    :  VEH
+           text         :  "Vehículos con capacidad en Peso que no tienen Capacidad en Volumen " ;
+
+        SET:
+           identifier   :  PMCE
+           index domain :  i in NCL
+           subset of    :  NPA
+           text         :  "Planta Más Cercana a la EDS i " ;
+
+        SET:
+           identifier   :  PMCE2
+           index domain :  (j)
+           subset of    :  NPA
+           text         :  "COnjunto Auxiliar de plantas potenciales a escoger la más cercana. Procedimiento Validacion_NPE_NPA_EDS" ;
+
       ENDSECTION  ;
 
       PROCEDURE
@@ -1658,10 +1752,14 @@ MAIN MODEL MCDP
       PROCEDURE
         identifier :  Definicion_PPMC
         body       :  
+          
+          !Obteniendo la planta j más cercana a la EDS i
+          
           !for i in NCL do
-          !!MINT:=10000000000000000;
-          !!Obteniendo la planta j más cercana a la EDS i         para defini PPMC=1 en ese caso
-          !!MIN(j IN NPA, TIVI(i,j));
+          !MINI:=10000000000000000;
+          !
+          !
+          !
           !       for j in NPA do
           !               if TIVI(i,j)<MINT then !Identificando si TIVI es menor al paramero auxiliar MINT
           !                       !PTPL(i)=TIVI(i,j)
@@ -1672,46 +1770,35 @@ MAIN MODEL MCDP
           !        !PPMC(i,j):=1
           !       endfor;
           !endfor;
-          !
 
       ENDPROCEDURE  ;
 
       PROCEDURE
         identifier :  Validacion_INVI_CAPS
+        comment    :  "Revisado"
         body       :  
-          empty MsjeValidacion;
+          !empty MsjeValidacion;
           for (i in NCL, m in PRC(i))  do
                   if INVI(i,m) > CAPS(i,m) then
-          
-          MsjeValidacion := MsjeValidacion + "\n" + "El Inventario Inicial de  "  + m +" en el nodo "  + i +" es mayor que su capacidad de almacenamiento " ;
-          
-          
-          
-          
+                          MsjeValidacion := MsjeValidacion + "\n" + "El Inventario Inicial de  "  + m +" en el nodo "  + i +" es mayor que su capacidad de almacenamiento " ;
                   endif;
           endfor;
-          
-          dialogerror  ( MsjeValidacion );
+          !dialogerror  ( MsjeValidacion );
 
       ENDPROCEDURE  ;
 
       PROCEDURE
         identifier :  Validacion_PNOI_PNPV
         body       :  
-          empty MsjeValidacion;
+          !empty MsjeValidacion;
           for (i  in NOP , k  )  do
             if PNOI(i,k)=1 then
                   if PNPV(i,k) <> PNOI(i,k) then
-          
-                    MsjeValidacion := MsjeValidacion + "\n" + "El nodo origen en el periodo inicial "  + i +" no se puede visitar con  "  + k +"  Mientras se asegura que el vehículo parte de ese nodo  " ;
-          
-          
-          
+                    MsjeValidacion := MsjeValidacion + "\n" + "El nodo origen "  + i +" no se puede visitar con "  + k +"  y se esta asegurando que el vehículo parte de ese nodo en el primer periodo" ;
                   endif;
              endif;
           endfor;
-          
-          dialogerror (MsjeValidacion)
+          !dialogerror (MsjeValidacion)
 
       ENDPROCEDURE  ;
 
@@ -1719,28 +1806,24 @@ MAIN MODEL MCDP
         identifier :  Validacion_TIJO_TFIJO
         body       :  
           empty MsjeValidacion;
-          for ( k , t  )  do
+          for (k,t)  do
             if TIJO(k,t) >=TFJO(k,t) then
-          
-          
-                    MsjeValidacion := MsjeValidacion + "\n" + "El tiempo de inicio de la jornada del vehículo  "  + k +" en el periodo "  + t +"  es mayor que el tiempo de finalización de la jornada  " ;
-          
-          
-          
-          
+                    MsjeValidacion:= MsjeValidacion + "\n" + "El tiempo de inicio de la jornada del vehículo  "  + k +" en el periodo "  + t +"  es mayor que el tiempo de finalización de la jornada  " ;
              endif;
           endfor;
-          
           dialogerror (MsjeValidacion)
 
       ENDPROCEDURE  ;
 
       PROCEDURE
-        identifier :  Validacion_Conectividad
-        comment    :  "!Validar procedimiento"
+        identifier :  Validacion_CONECTIVIDAD
+        comment    :  "Revisado
+                       Valida que exista conectividad de una PAB a una EDS. La conectividad Puede ser directa o indirecta.
+                       (Directa si se viaja directo a la planta, e indirecta si se viaja primero a un nodo de pernoctación)
+                       El MODELO  supone que de una planta de Abastecimiento a una estación puedo llegar en menos de dos periodos."
         body       :  
-          empty MsjeValidacion;
-          empty AUXI2;
+          Definicion_ENPP;
+          !empty MsjeValidacion, AUXI2;
           for i IN NCL do
               AUXI2:=0;
               if SCON1(i)=0 then !Si no hay posibilidades de salir de i a una planta
@@ -1755,13 +1838,14 @@ MAIN MODEL MCDP
                   If  AUXI2=0 then
                           MsjeValidacion := MsjeValidacion + "\n" + "Del nodo "  + i +" No hay forma de volver a una planta de abastecimiento, ni directo, ni a traves de un nodo de pernoctacion" ;
                   endif;
-          
                endif;
           endfor;
+          !dialogerror (MsjeValidacion);
           
           
-          empty MsjeValidacion;
-          empty AUXI2;
+          
+          
+          !empty AUXI2, MsjeValidacion;
           for i IN NCL do
               AUXI2:=0;
               if SCON2(i)=0 then !Si no hay posibilidades llegar a la EDS desde una Planta
@@ -1776,9 +1860,75 @@ MAIN MODEL MCDP
                   If  AUXI2=0 then
                           MsjeValidacion := MsjeValidacion + "\n" + "Al Nodo "  + i +" No hay forma de llegar desde una  planta de abastecimiento, ni directo, ni a traves de un nodo origen" ;
                   endif;
-          
                endif;
           endfor;
+          !dialogerror (MsjeValidacion)
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  Validacion_CAPV_DENS
+        body       :  
+          !Validar que la Capacidad en peso del vehículo y la DeNsidad sean congruentes con la capacidad  en volumen de
+          !los compartimientos. (CAPP)
+          
+          
+          
+          empty MsjeValidacion;
+          empty REPE(k);
+          for k in VEH do
+                  PCAL(k):=[sum(m,DENS(m))/CARD(PRO)]*sum(l in COV(k), CACC(L));
+                  REPE(k):=PCAL(k)/CAPV(K);
+                  IF REPE(k)>(PDES+1) or  REPE(k)>PDES then
+                          MsjeValidacion := MsjeValidacion + "\n" + "las densidades y las capacidades delos compartimentos no  son  congruentes con la  la capacidad en peso del vehículo "  + k +" ." ;
+                  ENDIF;
+          Endfor;
+          dialogerror (MsjeValidacion)
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  Validacion_DEM_CACC
+        comment    :  "Pendiente por validar capacidad de oferta versus demanda."
+        body       :  
+          !Validar demanda en Volumen vs Capacidad en Volumen
+          DETV:=SUM((i,m,t), DEMA(i,m,t));
+          CPTV:=SUM(l,(CACC(L)));
+          IF DETV>CPTV THEN
+                  dialogerror ("lA Demanda total es mayor que la capacidad de todos los compartimentos")
+          ENDIF;
+          !La la demanda hay que restarle el inventario Inicial.
+          ! Calcular la demanda, y la capacidad en tiempo. La demanda puede ser mayor, pero el vehiculo puede hacer varios viajes.
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  Valicacion_VEH_CAPV_CACC
+        comment    :  "Pendiente msje de validación"
+        body       :  
+          !Validar que todos los vehículos tengan capacidad en peso  y en Volumen
+          Empty CSCA, VSCA;
+          CONT:=0;
+          For l do
+                  if CACC(l) <=0 then
+                          CONT:=CONT+1;
+                          CSCA(l):=l;
+                  endif;
+          Endfor;
+          if CONT>0 then
+                  dialogerror ("Dirijase al Conjunto CSCA para ver loscompartimientos que no tienen Capacidad")
+          endif;
+          
+          CONT:=0;
+          For k do
+                  if CAPV(k) <=0 then
+                          CONT:=CONT+1;
+                          VSCA(k):=k;
+                  endif;
+          Endfor;
+          if CONT>0 then
+                  dialogerror ("Dirijase al Conjunto VSCA para ver vehícuos  que no tienen Capacidad en peso")
+          endif;
 
       ENDPROCEDURE  ;
 
