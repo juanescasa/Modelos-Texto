@@ -8,9 +8,17 @@ MAIN MODEL MCDP
   SECTION Conexion_con_DB
 
 
+    DECLARATION SECTION String_parameters
+
+      STRING PARAMETER:
+         identifier :  DATA_ESC
+         definition :  "OACED_ESC001" ;
+
+    ENDSECTION  ;
+
     DATABASE PROCEDURE
       identifier  :  DB_MAE_TIN
-      data source :  "OACED_ESC001"
+      data source :  DATA_ESC
       sql query   :  "Select * from  MAE_TIN"
       property    :  UseResultSet
       mapping     :  "COD_TIN"-->TIN
@@ -19,7 +27,7 @@ MAIN MODEL MCDP
 
     DATABASE PROCEDURE
       identifier  :  DB_MAE_MAR
-      data source :  "OACED_ESC001"
+      data source :  DATA_ESC
       sql query   :  "Select * from  MAE_MAR"
       property    :  UseResultSet
       mapping     :  "COD_MAR"-->MAR
@@ -28,41 +36,41 @@ MAIN MODEL MCDP
 
     DATABASE PROCEDURE
       identifier  :  DB_MAE_NOD
-      data source :  "OACED_ESC001"
+      data source :  DATA_ESC
       sql query   :  "SELECT * FROM MAE_NOD WHERE COD_ESC='1'"
       property    :  UseResultSet
       mapping     :  "COD_NOD"-->i,
-                                 "COD_TIN"-->TNOD(i),
-                                 "COOR_LON"-->CoorX(i),
-                                 "COOR_LAT"-->CoorY(i)
-                                 !"COD_MAR"-->MARCA(i),
+                                  "COD_TIN"-->TNOD(i),
+                                  "COOR_LON"-->CoorX(i),
+                                  "COOR_LAT"-->CoorY(i)
+                                  !"COD_MAR"-->MARCA(i),
 
     ENDPROCEDURE  ;
 
     DATABASE PROCEDURE
       identifier  :  DB_MAE_TIV
-      data source :  "OACED_ESC001"
+      data source :  DATA_ESC
       sql query   :  "Select * from  MAE_TIV"
       property    :  UseResultSet
       mapping     :  "COD_TIV"-->TVE,
-                                 "CDUV"-->CDUV(v)
+                                  "CDUV"-->CDUV(v)
 
     ENDPROCEDURE  ;
 
     DATABASE PROCEDURE
       identifier  :  DB_MAE_VEH
-      data source :  "OACED_ESC001"
+      data source :  DATA_ESC
       sql query   :  "SELECT * FROM MAE_VEH WHERE COD_ESC='1'"
       property    :  UseResultSet
       mapping     :  "COD_VEH"-->k,
-                                 "CAPV"-->CAPV(k),
-                                 "COUV"-->COUV(k)
+                                  "CAPV"-->CAPV(k),
+                                  "COUV"-->COUV(k)
 
     ENDPROCEDURE  ;
 
     DATABASE PROCEDURE
       identifier  :  DB_MAE_PER
-      data source :  "OACED_ESC001"
+      data source :  DATA_ESC
       sql query   :  " SELECT * FROM MAE_PER WHERE COD_ESC='1' "
       property    :  UseResultSet
       mapping     :  "COD_PER"-->PERH  !revisar si no va a poner problema con el Horizonte
@@ -71,194 +79,194 @@ MAIN MODEL MCDP
 
     DATABASE PROCEDURE
       identifier  :  DB_MAE_PRO
-      data source :  "OACED_ESC001"
+      data source :  DATA_ESC
       sql query   :  "Select * from  MAE_PRO"
       property    :  UseResultSet
       mapping     :  "COD_PRO"-->m,
-                                 "DENS"-->DENS(m)
+                                  "DENS"-->DENS(m)
 
     ENDPROCEDURE  ;
 
     DATABASE PROCEDURE
       identifier  :  DB_MAE_COM
-      data source :  "OACED_ESC001"
+      data source :  DATA_ESC
       sql query   :  " SELECT COD_COM, CACC " +
-                                         " FROM MAE_COM WHERE COD_COM IN " +
-                                                 " (SELECT  COD_COM FROM COM_VEH WHERE COD_VEH IN "  +
-                                                         " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') AND PCOV='1') "
+                                          " FROM MAE_COM WHERE COD_COM IN " +
+                                                  " (SELECT  COD_COM FROM COM_VEH WHERE COD_VEH IN "  +
+                                                          " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') AND PCOV='1') "
       property    :  UseResultSet
       mapping     :  "COD_COM"-->l,
-                                 "CACC"-->CACC(l)
+                                  "CACC"-->CACC(l)
 
     ENDPROCEDURE  ;
 
     DATABASE PROCEDURE
       identifier  :  DB_NOD_NOD1
-      data source :  "OACED_ESC001"
+      data source :  DATA_ESC
       sql query   :  "SELECT COD_NOD, COD_NOD1, TIVI, PNPP, DIST " +
-                                         " FROM NOD_NOD1 WHERE COD_NOD IN " +
-                                                 " (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') " +
-                                                 " AND  COD_NOD1 IN (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') "
+                                          " FROM NOD_NOD1 WHERE COD_NOD IN " +
+                                                  " (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') " +
+                                                  " AND  COD_NOD1 IN (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') "
       property    :  UseResultSet
       mapping     :  "COD_NOD"-->i,
-                                 "COD_NOD1"-->j,
-                                 "TIVI"-->TIVI(i,j),
-                                 "PNPP"-->PNPP(i,j),
-                                 "DIST"-->DIST(i,j)
+                                  "COD_NOD1"-->j,
+                                  "TIVI"-->TIVI(i,j),
+                                  "PNPP"-->PNPP(i,j),
+                                  "DIST"-->DIST(i,j)
 
     ENDPROCEDURE  ;
 
     DATABASE PROCEDURE
       identifier  :  DB_TIV_VEH
-      data source :  "OACED_ESC001"
+      data source :  DATA_ESC
       sql query   :  " SELECT COD_TIV, COD_VEH, PVET " +
-                                         " FROM TIV_VEH WHERE COD_VEH IN " +
-                                                 " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') "
+                                          " FROM TIV_VEH WHERE COD_VEH IN " +
+                                                  " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') "
       property    :  UseResultSet
       mapping     :  "COD_TIV"-->v,
-                                 "COD_VEH"-->k,
-                                 "PVET"-->PVET(v,k)
+                                  "COD_VEH"-->k,
+                                  "PVET"-->PVET(v,k)
 
     ENDPROCEDURE  ;
 
     DATABASE PROCEDURE
       identifier  :  DB_NOD_PRO
-      data source :  "OACED_ESC001"
+      data source :  DATA_ESC
       sql query   :  " SELECT COD_NOD, COD_PRO, CALM, CAPS, INVI, PPRC " +
-                                         " FROM NOD_PRO WHERE COD_NOD IN " +
-                                                 " (SELECT COD_NOD FROM MAE_NOD WHERE COD_ESC='1') " +
-                                                 " AND COD_PRO IN (SELECT COD_PRO FROM MAE_PRO)"
+                                          " FROM NOD_PRO WHERE COD_NOD IN " +
+                                                  " (SELECT COD_NOD FROM MAE_NOD WHERE COD_ESC='1') " +
+                                                  " AND COD_PRO IN (SELECT COD_PRO FROM MAE_PRO)"
       property    :  UseResultSet
       mapping     :  "COD_NOD"-->i,
-                                 "COD_PRO"-->m,
-                                 "CALM"-->CALM(i,m),
-                                 "CAPS"-->CAPS(i,m),
-                                 "INVI"-->INVI(i,m),
-                                 "PPRC"-->PPRC(i,m)
+                                  "COD_PRO"-->m,
+                                  "CALM"-->CALM(i,m),
+                                  "CAPS"-->CAPS(i,m),
+                                  "INVI"-->INVI(i,m),
+                                  "PPRC"-->PPRC(i,m)
       comment    :  "Nodos <- Productos"
 
     ENDPROCEDURE  ;
 
     DATABASE PROCEDURE
       identifier  :  DB_NOD_PER
-      data source :  "OACED_ESC001"
+      data source :  DATA_ESC
       sql query   :  " SELECT COD_NOD, COD_PER, TMIN, TMAX " +
-                                         " FROM NOD_PER WHERE COD_NOD IN " +
-                                                 " (SELECT COD_NOD FROM MAE_NOD WHERE COD_ESC='1') " +
-                                                 " AND COD_PER IN (SELECT COD_PER FROM MAE_PER WHERE COD_ESC='1') "
+                                          " FROM NOD_PER WHERE COD_NOD IN " +
+                                                  " (SELECT COD_NOD FROM MAE_NOD WHERE COD_ESC='1') " +
+                                                  " AND COD_PER IN (SELECT COD_PER FROM MAE_PER WHERE COD_ESC='1') "
       property    :  UseResultSet
       mapping     :  "COD_NOD"-->i,
-                                 "COD_PER"-->t,
-                                 "TMIN"-->TMIN(i,t),
-                                 "TMAX"-->TMAX(i,t)
+                                  "COD_PER"-->t,
+                                  "TMIN"-->TMIN(i,t),
+                                  "TMAX"-->TMAX(i,t)
       comment    :  "Nodos Periodos"
 
     ENDPROCEDURE  ;
 
     DATABASE PROCEDURE
       identifier  :  DB_NOD_VEH
-      data source :  "OACED_ESC001"
+      data source :  DATA_ESC
       sql query   :  "SELECT   COD_NOD, COD_VEH, PNPV, TSER, PNOI " +
-                                         " FROM NOD_VEH WHERE COD_NOD IN " +
-                                                 " (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') " +
-                                                 " AND COD_VEH IN (SELECT COD_VEH  FROM MAE_VEH WHERE COD_ESC='1')"
+                                          " FROM NOD_VEH WHERE COD_NOD IN " +
+                                                  " (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') " +
+                                                  " AND COD_VEH IN (SELECT COD_VEH  FROM MAE_VEH WHERE COD_ESC='1')"
       property    :  UseResultSet
       mapping     :  "COD_NOD"-->i,
-                                 "COD_VEH"-->k,
-                                 "PNPV"-->PNPV(i,k),
-                                 "TSER"-->TSER(i,k),
-                                 "PNOI"-->PNOI(i,k)
+                                  "COD_VEH"-->k,
+                                  "PNPV"-->PNPV(i,k),
+                                  "TSER"-->TSER(i,k),
+                                  "PNOI"-->PNOI(i,k)
 
     ENDPROCEDURE  ;
 
     DATABASE PROCEDURE
       identifier  :  DB_COM_VEH
-      data source :  "OACED_ESC001"
+      data source :  DATA_ESC
       sql query   :  " SELECT  COD_VEH, COD_COM, PCOV " +
-                                         " FROM COM_VEH WHERE COD_VEH IN " +
-                                                 " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') AND PCOV='1' "
+                                          " FROM COM_VEH WHERE COD_VEH IN " +
+                                                  " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') AND PCOV='1' "
       property    :  UseResultSet
       mapping     :  "COD_VEH"-->k,
-                                 "COD_COM"-->l,
-                                 "PCOV"-->PCOV(l,k)
+                                  "COD_COM"-->l,
+                                  "PCOV"-->PCOV(l,k)
       comment    :  "Compartimientos<-Vehiculos"
 
     ENDPROCEDURE  ;
 
     DATABASE PROCEDURE
       identifier  :  DB_VEH_PER
-      data source :  "OACED_ESC001"
+      data source :  DATA_ESC
       sql query   :  " SELECT COD_VEH, COD_PER, TFJO, TIJO " +
-                                         " FROM VEH_PER WHERE COD_VEH IN " +
-                                                 " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') "  +
-                                                 " AND COD_PER IN (SELECT COD_PER FROM MAE_PER WHERE COD_ESC='1')"
+                                          " FROM VEH_PER WHERE COD_VEH IN " +
+                                                  " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') "  +
+                                                  " AND COD_PER IN (SELECT COD_PER FROM MAE_PER WHERE COD_ESC='1')"
       property    :  UseResultSet
       mapping     :  "COD_VEH"-->k,
-                                 "COD_PER"-->t,
-                                 "TFJO"-->TFJO(k,t),
-                                 "TIJO"-->TIJO(k,t)
+                                  "COD_PER"-->t,
+                                  "TFJO"-->TFJO(k,t),
+                                  "TIJO"-->TIJO(k,t)
       comment    :  "Vehiculos Periodos"
 
     ENDPROCEDURE  ;
 
     DATABASE PROCEDURE
       identifier  :  DB_NOD_NOD1_TIV
-      data source :  "OACED_ESC001"
+      data source :  DATA_ESC
       sql query   :  " SELECT COD_NOD, COD_NOD1, COD_TIV, CTRA " +
-                                          "FROM NOD_NOD1_TIV WHERE COD_NOD IN " +
-                                                 " (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') " +
-                                                 " AND  COD_NOD1 IN (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') "
+                                           "FROM NOD_NOD1_TIV WHERE COD_NOD IN " +
+                                                  " (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') " +
+                                                  " AND  COD_NOD1 IN (SELECT COD_NOD  FROM MAE_NOD WHERE COD_ESC='1') "
       property    :  UseResultSet
       mapping     :  "COD_NOD"-->i,
-                                 "COD_NOD1"-->j,
-                                 "COD_TIV"-->v,
-                                 "CTRA"-->CTRA(i,j,v)
+                                  "COD_NOD1"-->j,
+                                  "COD_TIV"-->v,
+                                  "CTRA"-->CTRA(i,j,v)
       comment    :  "Nodos Nodos Tipo de Vehículos"
 
     ENDPROCEDURE  ;
 
     DATABASE PROCEDURE
       identifier  :  DB_NOD_PRO_PER
-      data source :  "OACED_ESC001"
+      data source :  DATA_ESC
       sql query   :  " SELECT COD_NOD, COD_PRO, COD_PER, DEMA, INVS " +
-                                         " FROM NOD_PRO_PER WHERE COD_NOD IN " +
-                                                 " (SELECT COD_NOD FROM MAE_NOD WHERE COD_ESC='1') " +
-                                                 " AND COD_PER IN (SELECT COD_PER FROM MAE_PER WHERE COD_ESC='1') "
+                                          " FROM NOD_PRO_PER WHERE COD_NOD IN " +
+                                                  " (SELECT COD_NOD FROM MAE_NOD WHERE COD_ESC='1') " +
+                                                  " AND COD_PER IN (SELECT COD_PER FROM MAE_PER WHERE COD_ESC='1') "
       property    :  UseResultSet
       mapping     :  "COD_NOD"-->i,
-                                 "COD_PRO"-->m,
-                                 "COD_PER"-->t,
-                                 "DEMA"-->DEMA(i,m,t),
-                                 "INVS"-->INVS(i,m,t)
+                                  "COD_PRO"-->m,
+                                  "COD_PER"-->t,
+                                  "DEMA"-->DEMA(i,m,t),
+                                  "INVS"-->INVS(i,m,t)
       comment    :  "Nodos<-Productos-Periodos"
 
     ENDPROCEDURE  ;
 
     DATABASE PROCEDURE
       identifier  :  DB_PRO_COM
-      data source :  "OACED_ESC001"
+      data source :  DATA_ESC
       sql query   :  " SELECT COD_PRO, COD_COM, CCIV FROM PRO_COM " +
-                                         " WHERE COD_COM IN " +
-                                                 " (SELECT   COD_COM " +
-                                                         " FROM COM_VEH WHERE COD_VEH IN " +
-                                                                 " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') AND PCOV='1') "
+                                          " WHERE COD_COM IN " +
+                                                  " (SELECT   COD_COM " +
+                                                          " FROM COM_VEH WHERE COD_VEH IN " +
+                                                                  " (SELECT COD_VEH FROM MAE_VEH WHERE COD_ESC='1') AND PCOV='1') "
       property    :  UseResultSet
       mapping     :  "COD_PRO"-->m,
-                                 "COD_COM"-->l,
-                                 "CCIV"-->CCIV(m,l)
+                                  "COD_COM"-->l,
+                                  "CCIV"-->CCIV(m,l)
       comment    :  "Nodos Productos Compartimientos"
 
     ENDPROCEDURE  ;
 
     DATABASE PROCEDURE
       identifier  :  DB_ESCALARES
-      data source :  "OACED_ESC001"
+      data source :  DATA_ESC
       sql query   :  " SELECT COD_ESC, VAL_ESC FROM ESCALARES  "
-                                 !" SELECT COD_ESC, VAL_ESC FROM ESCALARES WHERE COD_ESC='MBIN' "
+                                  !" SELECT COD_ESC, VAL_ESC FROM ESCALARES WHERE COD_ESC='MBIN' "
       property    :  UseResultSet
       mapping     :  "MBIN"-->MBIN ! REVISAR
                       
-                                 !revisar esto, porque se modificó, la col ya no es MBIN, sino que es un dato de la Tabla
+                                  !revisar esto, porque se modificó, la col ya no es MBIN, sino que es un dato de la Tabla
 
     ENDPROCEDURE  ;
 
@@ -339,6 +347,13 @@ MAIN MODEL MCDP
          text         :  "Nodos Planta de abastecimiento"
          definition   :  {i in NOD| TNOD(i)="PLANT"}
          comment      :  "Este conjunto incluye las plantas dummy, para permitir recirculación" ;
+
+      SET:
+         identifier   :  NPF
+         subset of    :  NPA
+         text         :  "Nodos plantas ficticias "
+         definition   :  !Se debería leer de la base de datos
+         comment      :  "Se usan en el procedimiento de validación Calculo_Reducc_Dom_PFICT" ;
 
       SET:
          identifier   :  NCL
@@ -1541,6 +1556,20 @@ MAIN MODEL MCDP
     ENDPROCEDURE  ;
 
     PROCEDURE
+      identifier :  Calculo_Reducc_Dom_PFICT
+      body       :  
+        ! Las EDS que estén a más de 3 horas de la Planta, no están conectadas con las plantas ficticias
+        
+        for (i,j)| (i in NCL and j in NPF)  Do
+        
+                if TIVI(i,j)>=3 then
+                        PCON(i,j):=0;
+                endif;
+        endfor;
+
+    ENDPROCEDURE  ;
+
+    PROCEDURE
       identifier :  Seleccion_PAB_Mas_Cercana_EDS
       body       :  
         !Obteniendo la planta j más cercana a la EDS i
@@ -1750,30 +1779,6 @@ MAIN MODEL MCDP
       ENDPROCEDURE  ;
 
       PROCEDURE
-        identifier :  Definicion_PPMC
-        body       :  
-          
-          !Obteniendo la planta j más cercana a la EDS i
-          
-          !for i in NCL do
-          !MINI:=10000000000000000;
-          !
-          !
-          !
-          !       for j in NPA do
-          !               if TIVI(i,j)<MINT then !Identificando si TIVI es menor al paramero auxiliar MINT
-          !                       !PTPL(i)=TIVI(i,j)
-          !                       !MINT:=TIVI(i,j); !Reemplazando MINT, haciendolo = a TIVI en caso de que TIVI sea MENOR
-          !
-          !                               !EPMC(i):=j
-          !               endif;
-          !        !PPMC(i,j):=1
-          !       endfor;
-          !endfor;
-
-      ENDPROCEDURE  ;
-
-      PROCEDURE
         identifier :  Validacion_INVI_CAPS
         comment    :  "Revisado"
         body       :  
@@ -1874,7 +1879,7 @@ MAIN MODEL MCDP
           
           
           
-          empty MsjeValidacion;
+          !empty MsjeValidacion;
           empty REPE(k);
           for k in VEH do
                   PCAL(k):=[sum(m,DENS(m))/CARD(PRO)]*sum(l in COV(k), CACC(L));
@@ -1883,7 +1888,7 @@ MAIN MODEL MCDP
                           MsjeValidacion := MsjeValidacion + "\n" + "las densidades y las capacidades delos compartimentos no  son  congruentes con la  la capacidad en peso del vehículo "  + k +" ." ;
                   ENDIF;
           Endfor;
-          dialogerror (MsjeValidacion)
+          !dialogerror (MsjeValidacion)
 
       ENDPROCEDURE  ;
 
@@ -1895,7 +1900,7 @@ MAIN MODEL MCDP
           DETV:=SUM((i,m,t), DEMA(i,m,t));
           CPTV:=SUM(l,(CACC(L)));
           IF DETV>CPTV THEN
-                  dialogerror ("lA Demanda total es mayor que la capacidad de todos los compartimentos")
+                  MsjeValidacion := MsjeValidacion + "\n" + "lA Demanda total es mayor que la capacidad de todos los compartimentos "
           ENDIF;
           !La la demanda hay que restarle el inventario Inicial.
           ! Calcular la demanda, y la capacidad en tiempo. La demanda puede ser mayor, pero el vehiculo puede hacer varios viajes.
@@ -1916,7 +1921,7 @@ MAIN MODEL MCDP
                   endif;
           Endfor;
           if CONT>0 then
-                  dialogerror ("Dirijase al Conjunto CSCA para ver loscompartimientos que no tienen Capacidad")
+                  MsjeValidacion := MsjeValidacion + "\n" + "Existen compartimentos sin capacidad, dirijase al Conjunto CSCA para ver loscompartimientos que no tienen Capacidad"
           endif;
           
           CONT:=0;
@@ -1927,8 +1932,66 @@ MAIN MODEL MCDP
                   endif;
           Endfor;
           if CONT>0 then
-                  dialogerror ("Dirijase al Conjunto VSCA para ver vehícuos  que no tienen Capacidad en peso")
+                   MsjeValidacion := MsjeValidacion + "\n" + "Existen vehícuos sin capacidad, Dirijase al Conjunto VSCA para ver vehícuos  que no tienen Capacidad en peso"
           endif;
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  Validacion_CARD_SETS
+        body       :  
+          !Asegurando que hayan Plantas
+          If Card(NPA)=0 then
+                     MsjeValidacion := MsjeValidacion + "\n" + "No existen Plantas "
+          endif;
+          
+          !Asegurando que hayan nodos de pernoctación
+          If Card(NPE)=0 then
+                     MsjeValidacion := MsjeValidacion + "\n" + "No existen Nodos de pernoctación"
+          endif;
+          
+          !Asegurando que hayan Nodos Cliente
+          
+          If Card(NCL)=0 then
+                     MsjeValidacion := MsjeValidacion + "\n" + "No existen Nodos Cliente "
+          endif;
+          
+          
+          !Que todos los Vehículos tengan Compartimentos
+          for k in VEH  do
+                  If CARD(COV(k))=0 then
+                          MsjeValidacion := MsjeValidacion + "\n" + "el vehículo" + k + "está sin Compartimentos "
+                  endif;
+          endfor;
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  Validacion_NPE_NOP
+        body       :  
+          !Si existe un nodo de Pernoctación, debe existir un nodo Origen asociado a el.
+          !En otras palabras, deben haber tantos NOP como NPE
+          If Card(NPE)<>card(NOP) then
+                     MsjeValidacion := MsjeValidacion + "\n" + "Existe un desbalance ente los nodos de Pernoctación y los Origenes"
+          endif;
+          
+          ! Cada nodo origen solo debe tener un nodo asociado de Pernoctación y Visceversa.
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  Todas_Las_Validaciones
+        body       :  
+          Definicion_ENPP;
+          Validacion_INVI_CAPS;
+          Validacion_PNOI_PNPV;
+          Validacion_TIJO_TFIJO;
+          Validacion_CONECTIVIDAD;
+          Validacion_CAPV_DENS;
+          Validacion_DEM_CACC;
+          Valicacion_VEH_CAPV_CACC;
+          
+          dialogerror  ( MsjeValidacion)
 
       ENDPROCEDURE  ;
 
