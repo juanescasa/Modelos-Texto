@@ -543,7 +543,8 @@ MAIN MODEL MCDP
 
       SET:
          identifier   :  TIN
-         text         :  "Tipo de Nodod" ;
+         text         :  "Tipo de Nodod"
+         index        :  tn ;
 
       STRING PARAMETER:
          identifier   :  TNOD
@@ -553,14 +554,15 @@ MAIN MODEL MCDP
          identifier   :  NPA
          subset of    :  NOD
          text         :  "Nodos Planta de abastecimiento"
-         definition   :  {i in NOD| TNOD(i)="PLANT"}
+         definition   :  {i in NOD| TNOD(i)="PLANT"} !NPA son PLAOR o PLAFI ( tener en cuenta para cuando se actualicen los datos)
          comment      :  "Este conjunto incluye las plantas dummy, para permitir recirculación" ;
 
       SET:
          identifier   :  NPF
          subset of    :  NPA
          text         :  "Nodos plantas ficticias "
-         definition   :  {i in NOD| TNOD(i)="PLAFI"}
+         definition   :  {i in NOD| TNOD(i)="PLANT"} !Ojo esto es temporral, aquí debe ir la definición que está comenada
+                         !{i in NOD| TNOD(i)="PLAFI"}
                          !Se debería leer de la base de datos
          comment      :  "Se usan en el procedimiento de validación Calculo_Reducc_Dom_PFICT" ;
 
@@ -1434,11 +1436,17 @@ MAIN MODEL MCDP
 
       SET:
          identifier  :  VRP_SRES
-         subset of   :  AllConstraints ;
+         subset of   :  AllConstraints
+         definition  :  data
+                            { CCNV       , AUPC       , APCL       , CPPE       , CAPP       , RACV1      , SRACV1     , RACV2      , RVIN       ,
+                              RCPA1      , RCPA2      , BALI       , BAVI       , BAVC1      , BAVC2      , BAVO       , BAVP1      , BAVP2      ,
+                              AVOO1      , AVOO2      , RVSA       , ENSA       , RVLL       , AVOP       , DECP       , VRP_SNOR1  , VRP_SNOR3y4,
+                              VRP_LNPE3y4, SVIS       , DTFJ       , DTIJ       , MCO        , VRP_MCO    } ;
 
       SET:
          identifier  :  VRP_SVAR
-         subset of   :  AllVariables ;
+         subset of   :  AllVariables
+         definition  :  data { AVI, APE, ATR, CCC, INV, CCV, TLL, VRP_MCO } ;
 
       SET:
          identifier  :  SVAR
@@ -1722,7 +1730,8 @@ MAIN MODEL MCDP
         PARAMETER:
            identifier   :  PDES
            text         :  "Porcentaje de desviación de Capacidad en peso, capacidad de Compartimientos. Procedimiento: Validacion_CAPV_DENS"
-           range        :  [0, 1] ;
+           range        :  [0, 1]
+           definition   :  0.3 ;
 
         PARAMETER:
            identifier   :  REPE
@@ -1761,6 +1770,20 @@ MAIN MODEL MCDP
         PARAMETER:
            identifier   :  PAUX
            index domain :  (i) ;
+
+        PARAMETER:
+           identifier   :  TSTV
+           index domain :  (i,j,k)
+           text         :  "tiempo de servicio  de k en i más el tiempo de viaje de i a j "
+           definition   :  TSER(i,k) + TIVI(i,j) ;
+
+        PARAMETER:
+           identifier   :  MTSV
+           text         :  "Mínimo de la suma entre TIVI y TSER "
+           definition   :  MIN ((i,j,k)|TSTV(i,j,k) and i <> j ,TSTV(i,j,k))
+                           
+                           ! denotar i en un conjunto de todos menos en los nodos de pernocatación
+                           ;
 
         ELEMENT PARAMETER:
            identifier   :  ENPP
@@ -1864,13 +1887,17 @@ MAIN MODEL MCDP
       PROCEDURE
         identifier :  Validacion_TIJO_TFIJO
         body       :  
-          empty MsjeValidacion;
+          !empty MsjeValidacion;
+          !El tiempo de finalización de de Jornada debe ser mayor queel tiemo de Inicio de Jornada
           for (k,t)  do
             if TIJO(k,t) >=TFJO(k,t) then
                     MsjeValidacion:= MsjeValidacion + "\n" + "El tiempo de inicio de la jornada del vehículo  "  + k +" en el periodo "  + t +"  es mayor que el tiempo de finalización de la jornada  " ;
+           !LA DIFERENCIA entre TIJO y TFIJO no debe ser menor a la suma mínima de (TSER + TIVI)
+             elseif  (TFJO(k,t)- TIJO(k,t)) < MTSV then
+                   MsjeValidacion:= MsjeValidacion + "\n" + "La diferencia entre TFJO  y TIJO  para "  + k +" en el periodo "  + t +"  es más pequeña que el mínimo de TIVI + TSER  " ;
              endif;
           endfor;
-          dialogerror (MsjeValidacion)
+          !dialogerror (MsjeValidacion)
 
       ENDPROCEDURE  ;
 
@@ -1937,8 +1964,8 @@ MAIN MODEL MCDP
           empty REPE(k);
           for k in VEH do
                   PCAL(k):=[sum(m,DENS(m))/CARD(PRO)]*sum(l in COV(k), CACC(L));
-                  REPE(k):=PCAL(k)/CAPV(K);
-                  IF REPE(k)>(PDES+1) or  REPE(k)>PDES then
+                  REPE(k):=ABS(1-PCAL(k)/CAPV(K));
+                  IF  REPE(k)>PDES then
                           MsjeValidacion := MsjeValidacion + "\n" + "las densidades y las capacidades delos compartimentos no  son  congruentes con la  la capacidad en peso del vehículo "  + k +" ." ;
                   ENDIF;
           Endfor;
@@ -1995,26 +2022,93 @@ MAIN MODEL MCDP
         identifier :  Validacion_CARD_SETS
         body       :  
           !Asegurando que hayan Plantas
-          If Card(NPA)=0 then
+          If CARD(NPA)=0 then
                      MsjeValidacion := MsjeValidacion + "\n" + "No existen Plantas "
           endif;
           
           !Asegurando que hayan nodos de pernoctación
-          If Card(NPE)=0 then
+          If CARD(NPE)=0 then
                      MsjeValidacion := MsjeValidacion + "\n" + "No existen Nodos de pernoctación"
           endif;
           
           !Asegurando que hayan Nodos Cliente
           
-          If Card(NCL)=0 then
+          If CARD(NCL)=0 then
                      MsjeValidacion := MsjeValidacion + "\n" + "No existen Nodos Cliente "
           endif;
           
+          !Asegurando que hayan Tipos de Vehículos
+          If CARD(TVE)=0 then
+                     MsjeValidacion := MsjeValidacion + "\n" + "tipos de vehículos TVE "
+          endif;
           
+          !Asegurando que hayan Vehículos
+          If CARD(VEH)=0 then
+                     MsjeValidacion := MsjeValidacion + "\n" + "No existen Vehículos en VEH "
+          endif;
+          
+          !Asegurando que existan Productos
+          
+          if CARD(PRO)=0 then
+                  MsjeValidacion := MsjeValidacion + "\n" + "No existe ningún Producto"
+          endif;
+          
+          !Asegurando que existan Periodos
+          
+          if CARD(PHO)=0 then
+                  MsjeValidacion := MsjeValidacion + "\n" + "El horizonte de tiempo está vacío"
+          endif;
+          
+          !Asegurando que el subconjunto de Periodos PEP tenga elementos
+          
+          if CARD(PEP)=0 then
+                  MsjeValidacion := MsjeValidacion + "\n" + "El subconjunto de periodos PEP está Vacío"
+          endif;
+          
+          !Asegurando que el conjutno TIN  tenga los 5 Tipos de Nodos
+          if CARD(TIN)<>5 then
+                  MsjeValidacion := MsjeValidacion + "\n" + "No están definidos todos los cinco tipos de Nodo en TIN"
+          endif;
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  Validacion_CARD_INDEXED_SETS
+        body       :  
           !Que todos los Vehículos tengan Compartimentos
           for k in VEH  do
                   If CARD(COV(k))=0 then
                           MsjeValidacion := MsjeValidacion + "\n" + "el vehículo" + k + "está sin Compartimentos "
+                  endif;
+          endfor;
+          
+          !Asegurar que para cada Nodo de intercambio exista al menos un producto que se pueda intercambiar
+          for i in NIT do
+                  if CARD(PRC(i))<1 then
+                          MsjeValidacion := MsjeValidacion + "\n" + "El nodo de Intercambio" + i + "No puede intercambiar ningún producto"
+                  endif;
+          endfor;
+          
+          !Asegurar que Todo nodo pueda ser visitado al menos por algún vehículo: Esta se hace con el parametro de definición y no con CARD,
+          !porque es más fácil usar el parámetro en este caso
+          !Se hace con dos for porque quiero fijar i y empezar a variar k
+          for i do
+                  if sum(k, PNPV(i,k))<1 then
+                          MsjeValidacion := MsjeValidacion + "\n" + "El nodo " + i + "ser visitado por ningún vehículo (ver PNPV)"
+                  endif;
+          endfor;
+          
+          ! Asegurar que el Vehículo k este en un nodo origen al iniciar. No más de 1 y no menos de 1.
+          for k do
+                  if sum(i in NOP, PNOI(i,k))<>1 then
+                          MsjeValidacion := MsjeValidacion + "\n" + "El vehículo  " + k  + "Está mal asociado a su nodo origen (a más de uno o a ninguno) ver PNOI"
+                  endif;
+          endfor;
+          
+          ! Asegurar que el Vehículo k no esté asociado a un nodo origen que no sea del tipo ORIGE, es decir en NOP.
+          for k do
+                  if sum( i| i in NIT or i in NPE, PNOI(i,k))>=1 then
+                          MsjeValidacion := MsjeValidacion + "\n" + "El vehículo" + k  + "Está  asociado a un nodo origen que no es del tipo ORIGE. (Ver PNOI)"
                   endif;
           endfor;
 
@@ -2023,19 +2117,94 @@ MAIN MODEL MCDP
       PROCEDURE
         identifier :  Validacion_NPE_NOP
         body       :  
-          !Si existe un nodo de Pernoctación, debe existir un nodo Origen asociado a el.
+          !Si existe un nodo de Pernoctación, debe existir un nodo Origen asociado a él.
           !En otras palabras, deben haber tantos NOP como NPE
           If Card(NPE)<>card(NOP) then
                      MsjeValidacion := MsjeValidacion + "\n" + "Existe un desbalance ente los nodos de Pernoctación y los Origenes"
           endif;
           
-          ! Cada nodo origen solo debe tener un nodo asociado de Pernoctación y Visceversa.
+          ! Cada nodo origen solo debe tener un nodo asociado de Pernoctación y Visceversa
+          for i in NOP do
+                  if sum (j in NPE, PNPP(i,j)<>1) then
+                           MsjeValidacion := MsjeValidacion + "\n" + "El nodo origen potencial" + i + "No está asocuiado a solo un nodo de pernoctación (Ver PNPP)"
+                  endif;
+          endfor;
+          
+          for i in NPE do
+                  if sum (j in NOP, PNPP(i,j)<>1) then
+                           MsjeValidacion := MsjeValidacion + "\n" + "El nodo de pernoctaión" + i + "No está asocuiado a solo un nodo origen potencial  (Ver PNPP)"
+                  endif;
+          endfor;
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  Validacion_Parametros
+        body       :  
+          !Todoos los Parámetros deben ser positivos
+          !DEMA e INVS
+          for (i,m,t) do
+                  if DEMA(i,m,t)<0 then
+                           MsjeValidacion := MsjeValidacion + "\n" + "La demanda del nodo " + i + " del producto "  + m +" del periodo "  + t+ " ES NEGATIVA "
+                  endif;
+          
+                  if INVS(i,m,t)<0 then
+                           MsjeValidacion := MsjeValidacion + "\n" + "El inventario de seguridad INVS del nodo  " + i + " del producto "  + m +" del periodo "    + t+ " ES NEGATIVO "
+                  endif;
+          endfor;
+          
+          !CAPSM and CALM
+          for (i,m) do
+                  if CAPS(i,m)<0 then
+                           MsjeValidacion := MsjeValidacion + "\n" + " La capacidad máxima  CAPS den el nodo " + i + " del producto "  + m + " ES NEGATIVA "
+                  endif;
+          
+                  if CALM(i,m)<0 then
+                           MsjeValidacion := MsjeValidacion + "\n" + " El costo de almacenamiento " + i + " del producto "  + m + " ES NEGATIVA "
+                  endif;
+          endfor;
+          !TIVI
+          for (i,j) do
+                  if TIVI(i,j)<0 then
+                           MsjeValidacion := MsjeValidacion + "\n" + " El tiempo TIVI de viaje del nodo   " + i + " al nodo  "  + j + " ES NEGATIVO "
+                  endif
+          endfor;
+          
+          !CTRA
+          for (i,j,v) do
+                  if CTRA(i,j,v)<0 then
+                           MsjeValidacion := MsjeValidacion + "\n" + " El Costo de Tramo CTRA desde el nodo i    " + i + " al nodo  "  + j + " COn el tipo de vehiculo " + v + " ES NEGATIVO "
+                  endif;
+          endfor;
+          
+          !TMIN y TMAX
+          for (i,t) do
+                  if TMIN(i,t)<0 then
+                           MsjeValidacion := MsjeValidacion + "\n" + " La ventana de Tiempo Min TMIN   en el nodo   " + i + " en el periodo "  + t +  " ES NEGATIVA "
+                  endif;
+                  if TMAX(i,t)<0 then
+                           MsjeValidacion := MsjeValidacion + "\n" + " La ventana de Tiempo Max TMIN   en el nodo   " + i + " en el periodo "  + t +  " ES NEGATIVA "
+                  endif;
+          endfor;
+
+      ENDPROCEDURE  ;
+
+      PROCEDURE
+        identifier :  Validacion_TMIN_TMAX
+        body       :  
+          ! La ventana de tiemo TMAX debe ser mayor que TMIN
+          for (i,t) do
+                  if TMIN(i,t)>TMAX(i,t) then
+                           MsjeValidacion := MsjeValidacion + "\n" + " La ventana de Tiempo Min TMIN   en el nodo   " + i + " en el periodo "  + t +  " En mayor que TMAX "
+                  endif
+          endfor;
 
       ENDPROCEDURE  ;
 
       PROCEDURE
         identifier :  Todas_Las_Validaciones
         body       :  
+          Empty MsjeValidacion;
           Definicion_ENPP;
           Validacion_INVI_CAPS;
           Validacion_PNOI_PNPV;
